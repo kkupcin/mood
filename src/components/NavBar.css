@@ -1,0 +1,38 @@
+.navbar {
+    width: 80%;
+    margin: 32px auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar__logo {
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    font-size: 32px;
+    font-weight: 700;
+}
+
+.navbar__links {
+    display: flex;
+    justify-content: space-between;
+}
+
+.navbar__links--link {
+    color: inherit;
+    text-decoration: none;
+    font-size: 20px;
+    margin-left: 32px;
+    cursor: pointer;
+    opacity: 0.8;
+    transition: all 0.2s ease-in-out;
+}
+
+.navbar__links--link:hover {
+    opacity: 1;
+}
+
+.active {
+    opacity: 1;
+}
