@@ -2,6 +2,7 @@ import "./App.css";
 import { Route, Switch } from "react-router-dom";
 import NavBar from "./components/NavBar";
 import MainPage from "./pages/MainPage";
+import CalendarPage from "./pages/CalendarPage";
 
 function App() {
   return (
@@ -16,6 +17,9 @@ function App() {
         </Route>
         <Route path="/signup">
           <p>Sign up</p>
+        </Route>
+        <Route path="/calendar">
+          <CalendarPage />
         </Route>
       </Switch>
     </div>

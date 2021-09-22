@@ -1,0 +1,96 @@
+.calendar {
+    width: 70%;
+    height: 80vh;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: flex-end;
+}
+
+.calendar__title {
+    font-weight: 500;
+    font-size: 48px;
+    margin-bottom: 120px;
+    margin-top: 48px;
+}
+
+.calendar__div {
+    text-align: center;
+    height: 60vh;
+}
+
+.calendar__div--month {
+    font-size: 32px;
+    text-align: center;
+    margin-bottom: 32px;
+}
+
+.calendar__div--list {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+}
+
+.calendar__div--day {
+    height: 35px;
+    width: 35px;
+    margin: 16px;
+    background-color: #ccc;
+    border-radius: 50%;
+}
+
+.calendar__box {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.arrow {
+    margin: 36px;
+    font-size: 24px;
+    border: none;
+    background-color: transparent;
+}
+
+.arrow:hover {
+    cursor: pointer;
+}
+
+.color-guide {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.color-guide__item {
+    display: flex;
+    align-items: center;
+    font-size: 24px;
+}
+
+.mood-sad {
+    background-color: #C0C781;
+}
+
+.mood-happy {
+    background-color: #9067C6;
+}
+
+.mood-lonely {
+    background-color: #C59B76;
+}
+
+.mood-excited {
+    background-color: #E9806E;
+}
+
+.mood-adventurous {
+    background-color: #841C26;
+}
+
+.mood-nostalgic {
+    background-color: #5B6C5D;
+}
+
+.mood-afraid {
+    background-color: #477890;
+}
