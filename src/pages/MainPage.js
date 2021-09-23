@@ -5,6 +5,7 @@ const MainPage = () => {
     const body = document.querySelector('body')
     body.style.backgroundImage = `url(${img1})`
     body.style.backgroundPosition = 'right'
+    body.style.backgroundAttachment = 'fixed'
 
   return (
     <div className='main'>

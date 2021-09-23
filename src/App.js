@@ -3,6 +3,7 @@ import { Route, Switch } from "react-router-dom";
 import NavBar from "./components/NavBar";
 import MainPage from "./pages/MainPage";
 import CalendarPage from "./pages/CalendarPage";
+import SignupPage from "./pages/SignupPage";
 
 function App() {
   return (
@@ -16,7 +17,7 @@ function App() {
           <p>Login</p>
         </Route>
         <Route path="/signup">
-          <p>Sign up</p>
+          <SignupPage />
         </Route>
         <Route path="/calendar">
           <CalendarPage />
