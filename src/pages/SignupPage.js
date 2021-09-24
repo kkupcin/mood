@@ -8,6 +8,15 @@ const SignupPage = () => {
     email: "",
     password: "",
   });
+  const [passwordIsValid, setPasswordIsValid] = useState(false);
+
+  // TODO
+  // check if email/username in database
+  // check if password valid
+  // add screen if signup successful or error - button to try again if error, redirect if successful
+  // add css cues if username too short, email invalid
+  // disable button if form not filled
+  // clear fields oncec info submitted
 
   const usernameInputHandler = (e) => {
     setSignupInfo((prevState) => {
@@ -34,7 +43,11 @@ const SignupPage = () => {
   };
 
   const passwordCheckHandler = (e) => {
-      
+    if (signupInfo.password === e.target.value) {
+      setPasswordIsValid(true);
+    } else {
+      setPasswordIsValid(false);
+    }
   };
 
   const body = document.querySelector("body");
@@ -42,8 +55,18 @@ const SignupPage = () => {
   body.style.backgroundPosition = "right";
   body.style.backgroundAttachment = "fixed";
 
+  // const passwordErrorHandler = () => {
+
+  // }
+
   const signupFormSubmitHandler = (e) => {
     e.preventDefault();
+    if (passwordIsValid === false) {
+      // passwordErrorHandler();
+      console.log("Password does not match");
+      return;
+    }
+    console.log(signupInfo);
   };
 
   return (

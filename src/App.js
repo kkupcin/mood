@@ -4,6 +4,7 @@ import NavBar from "./components/NavBar";
 import MainPage from "./pages/MainPage";
 import CalendarPage from "./pages/CalendarPage";
 import SignupPage from "./pages/SignupPage";
+import LoginPage from "./pages/LoginPage";
 
 function App() {
   return (
@@ -14,7 +15,7 @@ function App() {
           <MainPage />
         </Route>
         <Route path="/login">
-          <p>Login</p>
+          <LoginPage />
         </Route>
         <Route path="/signup">
           <SignupPage />
