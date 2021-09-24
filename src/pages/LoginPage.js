@@ -1,6 +1,7 @@
 import "./LoginPage.css";
 import img4 from "../img/ben-neale-29w9FiMWSr8-unsplash.jpg";
 import { useState } from "react";
+import Parse from "parse";
 
 const LoginPage = () => {
   const [loginInfo, setLoginInfo] = useState({
@@ -9,6 +10,9 @@ const LoginPage = () => {
   });
 
   // TODO
+  // add successful login and redirect
+  // add login error and try again button
+  // disable button if form not filled
 
   const usernameInputHandler = (e) => {
     setLoginInfo((prevState) => {
@@ -31,9 +35,23 @@ const LoginPage = () => {
   body.style.backgroundPosition = "right";
   body.style.backgroundAttachment = "fixed";
 
-  const loginFormSubmitHandler = (e) => {
+  const loginFormSubmitHandler = async (e) => {
     e.preventDefault();
-    console.log(loginInfo);
+
+    const usernameValue = loginInfo.username
+    const passwordValue = loginInfo.password
+
+    try {
+        const loggedInUser = await Parse.User.logIn(usernameValue, passwordValue)
+        alert ('Success')
+    } catch(err) {
+        alert(err)
+    }
+
+    setLoginInfo({
+        username: "",
+        password: "",
+      })
   };
 
   return (
@@ -46,6 +64,7 @@ const LoginPage = () => {
             className="login-form__div--input"
             type="text"
             onChange={usernameInputHandler}
+            value={loginInfo.username}
           ></input>
         </div>
         <div className="login-form__div">
@@ -54,6 +73,7 @@ const LoginPage = () => {
             className="login-form__div--input"
             type="password"
             onChange={passwordInputHandler}
+            value={loginInfo.password}
           ></input>
         </div>
         <button className="login-form__button" onClick={loginFormSubmitHandler}>
