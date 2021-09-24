@@ -2,6 +2,7 @@ import "./SignupPage.css";
 import img3 from "../img/Group-1.jpg";
 import { useState } from "react";
 import Parse from "parse";
+import { Redirect } from "react-router-dom";
 
 const SignupPage = () => {
   const [signupInfo, setSignupInfo] = useState({
@@ -10,12 +11,16 @@ const SignupPage = () => {
     password: "",
   });
   const [passwordIsValid, setPasswordIsValid] = useState(false);
+  const [signupSuccessful, setSignupSuccessful] = useState(false);
+  const [isUsernameEmpty, setIsUsernameEmpty] = useState(true);
+  const [isPasswordEmpty, setIsPasswordEmpty] = useState(true);
+  const [isEmailEmpty, setIsEmailEmpty] = useState(true);
 
   // TODO
   // add error if user already exists
-  // add screen if signup successful or error - button to try again if error, redirect if successful
+  // add error screen if signup failed
   // add css cues if username too short, email invalid
-  // disable button if form not filled
+  // add css cue that password does not match
 
   const usernameInputHandler = (e) => {
     setSignupInfo((prevState) => {
@@ -23,6 +28,11 @@ const SignupPage = () => {
       infoCopy.username = e.target.value;
       return infoCopy;
     });
+    if (e.target.value.trim().length > 0) {
+      setIsUsernameEmpty(false);
+    } else {
+      setIsUsernameEmpty(true);
+    }
   };
 
   const emailInputHandler = (e) => {
@@ -31,6 +41,11 @@ const SignupPage = () => {
       infoCopy.email = e.target.value;
       return infoCopy;
     });
+    if (e.target.value.trim().length > 0) {
+      setIsEmailEmpty(false);
+    } else {
+      setIsEmailEmpty(true);
+    }
   };
 
   const passwordInputHandler = (e) => {
@@ -39,6 +54,11 @@ const SignupPage = () => {
       infoCopy.password = e.target.value;
       return infoCopy;
     });
+    if (e.target.value.trim().length > 0) {
+      setIsPasswordEmpty(false);
+    } else {
+      setIsPasswordEmpty(true);
+    }
   };
 
   const passwordCheckHandler = (e) => {
@@ -46,6 +66,19 @@ const SignupPage = () => {
       setPasswordIsValid(true);
     } else {
       setPasswordIsValid(false);
+    }
+  };
+
+  const formValidationCheck = () => {
+    if (
+      isUsernameEmpty === false &&
+      isPasswordEmpty === false &&
+      isEmailEmpty === false &&
+      passwordIsValid === true
+    ) {
+      return false;
+    } else {
+      return true;
     }
   };
 
@@ -74,69 +107,63 @@ const SignupPage = () => {
 
     try {
       const newUser = await Parse.User.signUp(usernameValue, passwordValue);
-      newUser.setEmail(emailValue)
-      newUser.save()
-      alert("Success");
+      newUser.setEmail(emailValue);
+      newUser.save();
+      setSignupSuccessful(true);
     } catch (err) {
-      alert(`${err}`);
+      alert(err);
+      setSignupSuccessful(false);
     }
-
-    setSignupInfo({
-      username: "",
-      email: "",
-      password: "",
-    });
-    const passwordCheckInput = document.querySelector("#password-check");
-    passwordCheckInput.value = "";
   };
 
   return (
     <div className="signup-box">
-      <h1 className="signup-title">Sign up to track your mood</h1>
-      <form className="signup-form">
-        <div className="signup-form__div">
-          <label className="signup-form__div--label">Username</label>
-          <input
-            className="signup-form__div--input"
-            type="text"
-            onChange={usernameInputHandler}
-            value={signupInfo.username}
-          ></input>
-        </div>
-        <div className="signup-form__div">
-          <label className="signup-form__div--label">Email</label>
-          <input
-            className="signup-form__div--input"
-            type="email"
-            onChange={emailInputHandler}
-            value={signupInfo.email}
-          ></input>
-        </div>
-        <div className="signup-form__div">
-          <label className="signup-form__div--label">Password</label>
-          <input
-            className="signup-form__div--input"
-            type="password"
-            onChange={passwordInputHandler}
-            value={signupInfo.password}
-          ></input>
-        </div>
-        <div className="signup-form__div">
-          <label className="signup-form__div--label">Confirm password</label>
-          <input
-            className="signup-form__div--input"
-            type="password"
-            onChange={passwordCheckHandler}
-            id="password-check"
-          ></input>
-        </div>
-        <button
-          className="signup-form__button"
-          onClick={signupFormSubmitHandler}
-        >
-          Sign me up
-        </button>
-      </form>
+      {signupSuccessful && <Redirect to="/" />}
+      <div>
+        <h1 className="signup-title">Sign up to track your mood</h1>
+        <form className="signup-form">
+          <div className="signup-form__div">
+            <label className="signup-form__div--label">Username</label>
+            <input
+              className="signup-form__div--input"
+              type="text"
+              onChange={usernameInputHandler}
+            ></input>
+          </div>
+          <div className="signup-form__div">
+            <label className="signup-form__div--label">Email</label>
+            <input
+              className="signup-form__div--input"
+              type="email"
+              onChange={emailInputHandler}
+            ></input>
+          </div>
+          <div className="signup-form__div">
+            <label className="signup-form__div--label">Password</label>
+            <input
+              className="signup-form__div--input"
+              type="password"
+              onChange={passwordInputHandler}
+            ></input>
+          </div>
+          <div className="signup-form__div">
+            <label className="signup-form__div--label">Confirm password</label>
+            <input
+              className="signup-form__div--input"
+              type="password"
+              onChange={passwordCheckHandler}
+              id="password-check"
+            ></input>
+          </div>
+          <button
+            disabled={formValidationCheck()}
+            className="signup-form__button"
+            onClick={signupFormSubmitHandler}
+          >
+            Sign me up
+          </button>
+        </form>
+      </div>
     </div>
   );
 };

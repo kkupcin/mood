@@ -11,6 +11,7 @@
 .signup-title {
     font-weight: 500;
     font-size: 48px;
+    margin-bottom: 32px;
 }
 
 .signup-form {
@@ -56,4 +57,9 @@
 .signup-form__button:hover {
     opacity: 0.8;
     cursor: pointer;
+}
+
+.signup-form__button:disabled {
+    background-color: #A7A7A9;
+    cursor: default;
 }
