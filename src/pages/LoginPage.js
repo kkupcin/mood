@@ -4,7 +4,7 @@ import { useState } from "react";
 import Parse from "parse";
 import { Redirect } from "react-router-dom";
 
-const LoginPage = () => {
+const LoginPage = props => {
   const [loginInfo, setLoginInfo] = useState({
     username: "",
     password: "",
@@ -64,9 +64,11 @@ const LoginPage = () => {
     try {
       await Parse.User.logIn(usernameValue, passwordValue);
       setLoginSuccessful(true)
+      props.loginHandler(true)
     } catch (err) {
       alert(err);
       setLoginSuccessful(false)
+      props.loginHandler(false)
     }
 
     setLoginInfo({

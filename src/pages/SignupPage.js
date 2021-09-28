@@ -4,7 +4,7 @@ import { useState } from "react";
 import Parse from "parse";
 import { Redirect } from "react-router-dom";
 
-const SignupPage = () => {
+const SignupPage = props => {
   const [signupInfo, setSignupInfo] = useState({
     username: "",
     email: "",
@@ -110,9 +110,11 @@ const SignupPage = () => {
       newUser.setEmail(emailValue);
       newUser.save();
       setSignupSuccessful(true);
+      props.loginHandler(true)
     } catch (err) {
       alert(err);
       setSignupSuccessful(false);
+      props.loginHandler(false)
     }
   };
 
