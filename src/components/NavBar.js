@@ -3,8 +3,8 @@ import { Link, NavLink } from "react-router-dom";
 import Parse from "parse";
 
 const NavBar = (props) => {
-    const logOutHandler = () => {
-        Parse.User.logOut()
+    const logOutHandler = async () => {
+        await Parse.User.logOut()
         props.isLoggedInHandler(false)
     }
 

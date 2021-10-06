@@ -1,43 +1,58 @@
 import "./Calendar.css";
 import { calendarData } from "./calendarData";
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from "react";
 import Parse from "parse";
 
 const Calendar = () => {
-  const [dayInfo, setDayInfo] = useState([
-    {
-      day: '',
-      month: '',
-      year: '',
-      mood: '',
-      book: {},
-      movie: {},
-      playlist: {}
-    }
-  ])
+  const [daysInfo, setDaysInfo] = useState(calendarData);
 
-  useEffect(() => {
-    getDate()
-  }, [])
-
-  const getDate = async () => {
+  const getDate = useCallback(async () => {
     const query = new Parse.Query("Day");
-    query.equalTo("user", Parse.User.current);
-  
+    query.equalTo("user", Parse.User.current());
+
     try {
       let fetchedDays = await query.find();
       fetchedDays.forEach((day) => {
-        let currIndex = day.get("date").getDate() -1;
-  
-        calendarData[0].days[currIndex].mood = day.get("mood");
-        calendarData[0].days[currIndex].playlist = day.get("playlist").id;
-        calendarData[0].days[currIndex].movie = day.get("movie").id;
-        calendarData[0].days[currIndex].book = day.get("book").id;
-        calendarData[0].days[currIndex].date = day.get("date");
+        let currIndex = day.get("date").getDate() - 1;
+
+        setDaysInfo((prevState) => {
+          let daysInfoCopy = [...calendarData];
+          daysInfoCopy[0].days[currIndex].mood = day.get("mood");
+          daysInfoCopy[0].days[currIndex].playlist = day.get("playlist").id;
+          daysInfoCopy[0].days[currIndex].movie = day.get("movie").id;
+          daysInfoCopy[0].days[currIndex].book = day.get("book").id;
+          daysInfoCopy[0].days[currIndex].date = day.get("date");
+          return daysInfoCopy;
+        });
       });
-      console.log(calendarData);
+      console.log(daysInfo);
     } catch (err) {
       console.log(err);
+    }
+  }, [daysInfo]);
+
+  useEffect(() => {
+    getDate();
+  }, [getDate]);
+
+  const applyDayColor = (index) => {
+    switch (daysInfo[0].days[index].mood) {
+      case "sad":
+        return "mood-sad";
+      case "adventurous":
+        return "mood-adventurous";
+      case "lonely":
+        return "mood-lonely";
+      case "excited":
+        return "mood-excited";
+      case "happy":
+        return "mood-happy";
+      case "nostalgic":
+        return "mood-nostalgic";
+      case "afraid":
+        return "mood-afraid";
+      default:
+        return "";
     }
   };
 
@@ -49,9 +64,15 @@ const Calendar = () => {
         <div className="calendar__box">
           <button className="arrow-back arrow fas fa-chevron-left"></button>
           <ul className="calendar__div--list">
-              {calendarData[0].days.map(day => {
-                  return <li className={`calendar__div--day`}></li>
-              })}
+            {daysInfo[0].days.map((day, index) => {
+              return (
+                <li className={`calendar__div--day ${applyDayColor(index)}`}>
+                  <span className="calendar__div--day--span">
+                    {!day.date ? index + 1 : day.date.getDate()}
+                  </span>
+                </li>
+              );
+            })}
           </ul>
           <button className="arrow-forward arrow fas fa-chevron-right"></button>
         </div>

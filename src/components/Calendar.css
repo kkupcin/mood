@@ -37,7 +37,28 @@
     margin: 16px;
     background-color: #ccc;
     border-radius: 50%;
+    position: relative;
 }
+
+.calendar__div--day--span {
+    color: white;
+    font-size: 20px;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 24px;
+    opacity: 0;
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+}
+
+.calendar__div--day:hover .calendar__div--day--span {
+    display: block;
+    top: 8px;
+    opacity: 1;
+}
+
+
 
 .calendar__box {
     display: flex;
