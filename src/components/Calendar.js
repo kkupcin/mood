@@ -1,10 +1,15 @@
 import "./Calendar.css";
 import { calendarData } from "./calendarData";
+import CalendarModal from "./CalendarModal";
 import { useEffect, useState, useCallback } from "react";
 import Parse from "parse";
 
+let clickedNumber = "";
+
 const Calendar = () => {
   const [daysInfo, setDaysInfo] = useState(calendarData);
+  const [showModal, setShowModal] = useState(false);
+  const [clickedDayInfo, setClickedDayInfo] = useState([]);
 
   const getDate = useCallback(async () => {
     const query = new Parse.Query("Day");
@@ -25,11 +30,10 @@ const Calendar = () => {
           return daysInfoCopy;
         });
       });
-      console.log(daysInfo);
     } catch (err) {
       console.log(err);
     }
-  }, [daysInfo]);
+  }, []);
 
   useEffect(() => {
     getDate();
@@ -56,8 +60,28 @@ const Calendar = () => {
     }
   };
 
+  const openDayInfoHandler = (e) => {
+    const clickedDay = daysInfo[0].days.filter(
+      (day, index) => index + 1 === parseInt(e.target.innerText)
+    );
+
+    clickedNumber = e.target.innerText;
+
+    setClickedDayInfo(clickedDay);
+
+    setShowModal(true);
+    // Add modal with the day's info
+  };
+
   return (
     <div className="calendar">
+      {showModal && (
+        <CalendarModal
+          data={clickedDayInfo}
+          month={daysInfo[0].month}
+          day={clickedNumber}
+        />
+      )}
       <div className="calendar__div">
         <h1 className="calendar__title">Your Mood Calendar</h1>
         <h3 className="calendar__div--month">{calendarData[0].month}</h3>
@@ -66,7 +90,10 @@ const Calendar = () => {
           <ul className="calendar__div--list">
             {daysInfo[0].days.map((day, index) => {
               return (
-                <li className={`calendar__div--day ${applyDayColor(index)}`}>
+                <li
+                  onClick={openDayInfoHandler}
+                  className={`calendar__div--day ${applyDayColor(index)}`}
+                >
                   <span className="calendar__div--day--span">
                     {!day.date ? index + 1 : day.date.getDate()}
                   </span>
