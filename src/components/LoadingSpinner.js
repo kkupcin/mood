@@ -1,9 +1,14 @@
-import './LoadingSpinner.css'
+import "./LoadingSpinner.css";
 
 const LoadingSpinner = () => {
-    return <div class="item">
-      <i class="loader"></i>
+  return (
+    <div className="lds-ellipsis">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
     </div>
-}
+  );
+};
 
-export default LoadingSpinner
+export default LoadingSpinner;

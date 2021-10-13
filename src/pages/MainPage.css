@@ -28,6 +28,7 @@
     border-radius: 50px;
     margin: 18px 32px 18px 0;
     transition: all 0.2s ease-in-out;
+    text-decoration: none;
 }
 
 .main__list--item:hover {

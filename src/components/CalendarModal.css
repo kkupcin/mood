@@ -12,7 +12,9 @@
 .modal--exit {
     color: white;
     font-size: 30px;
-    transform: translateY(-200%) translateX(100%); 
+    position: absolute;
+    top: -50px;
+    right: 0;
 }
 
 .modal--exit:hover {

@@ -13,14 +13,17 @@ const CalendarModal = (props) => {
       try {
         const Book = new Parse.Query("Book");
         Book.equalTo("objectId", props.data[0].book);
+        Book.equalTo('mood', props.mood)
         const fetchedBook = await Book.find();
 
         const Playlist = new Parse.Query("Playlist");
         Playlist.equalTo("objectId", props.data[0].playlist);
+        Playlist.equalTo('mood', props.mood)
         const fetchedPlaylist = await Playlist.find();
 
         const Movie = new Parse.Query("Movie");
         Movie.equalTo("objectId", props.data[0].movie);
+        Movie.equalTo('mood', props.mood)
         const fetchedMovie = await Movie.find();
 
         const bookTitle = fetchedBook[0].get("title");
@@ -57,13 +60,17 @@ const CalendarModal = (props) => {
     retrieveData();
   }, []);
 
+  const closeModalHandler = () => {
+    props.closeModal(true)
+  }
+
   return (
     <React.Fragment>
       <div className="modal-outer"></div>
       {isLoading && <LoadingSpinner />}
       {!isLoading && (
         <div className="modal-inner">
-          <div className='modal--exit'>X</div>
+          <div className='modal--exit' onClick={closeModalHandler}>X</div>
           <h1 className="modal--title">{`${props.month} ${props.day}`}</h1>
           <div className="modal-box">
             <div className="modal--content-box">

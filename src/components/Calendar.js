@@ -73,13 +73,19 @@ const Calendar = () => {
     // Add modal with the day's info
   };
 
+  const closeModalHandler = () => {
+    setShowModal(false)
+  }
+
   return (
     <div className="calendar">
       {showModal && (
         <CalendarModal
+          closeModal={closeModalHandler}
           data={clickedDayInfo}
           month={daysInfo[0].month}
           day={clickedNumber}
+          mood={clickedDayInfo[0].mood}
         />
       )}
       <div className="calendar__div">

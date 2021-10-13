@@ -1,0 +1,36 @@
+.mood-page-container {
+    width: 60%;
+    margin: 48px;
+    margin-top: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    height: 60vh;
+}
+
+.mood-page__title {
+    font-size: 48px;
+    margin-bottom: 24px;
+    text-align: center;
+}
+
+.mood-page__content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 24px;
+}
+
+.mood-page__content--img {
+    width: 20%;
+    margin: 0 16px;
+}
+
+.mood-page__content--text {
+    margin-left: 24px;
+}
+
+.mood-page__content--text h3 {
+    font-size: 28px;
+    margin-bottom: 24px;
+}
