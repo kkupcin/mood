@@ -1,7 +1,6 @@
 .mood-page-container {
     width: 60%;
-    margin: 48px;
-    margin-top: 100px;
+    margin-top: 150px;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
@@ -19,6 +18,7 @@
     justify-content: space-between;
     align-items: center;
     font-size: 24px;
+    height: 800px;
 }
 
 .mood-page__content--img {

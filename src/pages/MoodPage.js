@@ -12,12 +12,13 @@ const MoodPage = (props) => {
   body.style.backgroundAttachment = "fixed";
 
   const [isLoading, setIsLoading] = useState(true);
-  const [moodInfo, setMoodInfo] = useState({})
-  const { mood } = useParams()
+  const [moodInfo, setMoodInfo] = useState({});
+  const [currInfo, setCurrInfo] = useState({});
+  const { mood } = useParams();
 
   useEffect(() => {
-    setMood(mood)
-  }, [])
+    setMood(mood);
+  }, []);
 
   const setBook = async (mood) => {
     const query = new Parse.Query("Book");
@@ -58,8 +59,18 @@ const MoodPage = (props) => {
       setMoodInfo({
         book: book,
         movie: movie,
-        playlist: playlist
-      })
+        playlist: playlist,
+      });
+
+      console.log(book);
+
+      setCurrInfo({
+        current: "book",
+        title: book.get("title"),
+        description: book.get("description"),
+        avatar: book.get("avatar"),
+        author: book.get("author"),
+      });
 
       Day.set("date", date);
       Day.set("user", Parse.User.current());
@@ -76,20 +87,94 @@ const MoodPage = (props) => {
     }
   };
 
+  const changeCurrShownHandler = (e) => {
+    if (e.target.classList.contains("arrow-forward")) {
+      switch (currInfo.current) {
+        case "book":
+          setCurrInfo({
+            current: "movie",
+            title: moodInfo.movie.get("title"),
+            description: moodInfo.movie.get("description"),
+            avatar: moodInfo.movie.get("avatar"),
+          });
+          break;
+        case "movie":
+          setCurrInfo({
+            current: "playlist",
+            title: moodInfo.playlist.get("title"),
+            description: moodInfo.playlist.get("link"),
+            avatar: moodInfo.playlist.get("avatar"),
+          });
+          break;
+        case "playlist":
+          setCurrInfo({
+            current: "book",
+            title: moodInfo.book.get("title"),
+            description: moodInfo.book.get("description"),
+            avatar: moodInfo.book.get("avatar"),
+            author: moodInfo.book.get("author"),
+          });
+          break;
+      }
+    } else if (e.target.classList.contains("arrow-back")) {
+      switch (currInfo.current) {
+        case "book":
+          setCurrInfo({
+            current: "playlist",
+            title: moodInfo.playlist.get("title"),
+            description: moodInfo.playlist.get("link"),
+            avatar: moodInfo.playlist.get("avatar"),
+          });
+          break;
+        case "playlist":
+          setCurrInfo({
+            current: "movie",
+            title: moodInfo.movie.get("title"),
+            description: moodInfo.movie.get("description"),
+            avatar: moodInfo.movie.get("avatar"),
+          });
+          break;
+        case "movie":
+          setCurrInfo({
+            current: "book",
+            title: moodInfo.book.get("title"),
+            description: moodInfo.book.get("description"),
+            avatar: moodInfo.book.get("avatar"),
+            author: moodInfo.book.get("author"),
+          });
+          break;
+      }
+    }
+  };
+
   return (
     <React.Fragment>
-      {isLoading && <LoadingSpinner />}
+      {isLoading && (
+        <div className="mood-page-container">
+          <LoadingSpinner className="mood-page" />
+        </div>
+      )}
       {!isLoading && (
-        <div className='mood-page-container'>
-          <h1 className='mood-page__title'>{`You are feeling ${mood}`}</h1>
-          <div className='mood-page__content'>
-            <button className="arrow-back arrow fas fa-chevron-left"></button>
-            <img className='mood-page__content--img' src={moodInfo.book.get('avatar')} />
-            <div className='mood-page__content--text'>
-              <h3>{`${moodInfo.book.get('title')} by ${moodInfo.book.get('author')}`}</h3>
-              <p>{moodInfo.book.get('description')}</p>
+        <div className="mood-page-container">
+          <h1 className="mood-page__title">{`You are feeling ${mood}`}</h1>
+          <div className="mood-page__content">
+            <button
+              className="arrow-back arrow fas fa-chevron-left"
+              onClick={changeCurrShownHandler}
+            ></button>
+            <img className="mood-page__content--img" src={currInfo.avatar} />
+            <div className="mood-page__content--text">
+              <h3>
+                {currInfo.author
+                  ? `${currInfo.title} by ${currInfo.author}`
+                  : currInfo.title}
+              </h3>
+              <p>{currInfo.description}</p>
             </div>
-            <button className="arrow-forward arrow fas fa-chevron-right"></button>
+            <button
+              className="arrow-forward arrow fas fa-chevron-right"
+              onClick={changeCurrShownHandler}
+            ></button>
           </div>
         </div>
       )}

@@ -66,6 +66,7 @@
 .modal--img {
     width: 100%;
     object-fit: cover;
+    max-height: 500px;
 }
 
 .modal--content-box p {

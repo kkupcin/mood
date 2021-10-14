@@ -7,6 +7,9 @@
   margin: 0 auto;
   transform: translateY(calc(50vh - 80px));
 }
+.lds-ellipsis.mood-page{
+  transform: none;
+}
 .lds-ellipsis div {
   position: absolute;
   top: 33px;

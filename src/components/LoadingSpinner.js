@@ -1,8 +1,8 @@
 import "./LoadingSpinner.css";
 
-const LoadingSpinner = () => {
+const LoadingSpinner = (props) => {
   return (
-    <div className="lds-ellipsis">
+    <div className={`lds-ellipsis ${props.className}`}>
       <div></div>
       <div></div>
       <div></div>
