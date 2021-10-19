@@ -115,3 +115,11 @@
 .mood-afraid {
     background-color: #477890;
 }
+
+li.disabled {
+    pointer-events: none;
+}
+
+button.disabled {
+    display: none;
+}
