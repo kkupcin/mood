@@ -16,7 +16,6 @@ Parse.initialize(PARSE_APPLICATION_ID, PARSE_JAVASCRIPT_KEY);
 Parse.serverURL = PARSE_HOST_URL;
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  let { mood } = useParams()
 
   useEffect(() => {
     if (Parse.User.current()) {
