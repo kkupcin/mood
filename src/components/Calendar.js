@@ -3,6 +3,8 @@ import { setCalendarData } from "./calendarData";
 import CalendarModal from "./CalendarModal";
 import { useEffect, useState } from "react";
 import Parse from "parse";
+import { Container } from './styles/Container.styled'
+import { Title } from "./styles/Title.styled";
 
 let clickedNumber = "";
 
@@ -114,18 +116,20 @@ const Calendar = () => {
   };
 
   return (
-    <div className="calendar">
+    <Container left="40%">
       {showModal && (
         <CalendarModal
           closeModal={closeModalHandler}
           data={clickedDayInfo}
-          month={daysInfo[0].month}
+          month={currentDate.toLocaleString("en-US", {
+            month: "long",
+          })}
           day={clickedNumber}
           mood={clickedDayInfo[0].mood}
         />
       )}
       <div className="calendar__div">
-        <h1 className="calendar__title">Your Mood Calendar</h1>
+        <Title>Your Mood Calendar</Title>
         <h3 className="calendar__div--month">
           {currentDate.toLocaleString("en-US", {
             month: "long",
@@ -187,7 +191,7 @@ const Calendar = () => {
           Excited
         </li>
       </ul>
-    </div>
+    </Container>
   );
 };
 

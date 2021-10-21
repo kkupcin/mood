@@ -1,6 +1,8 @@
 import "./MainPage.css";
 import img1 from "../img/leone-venter-VieM9BdZKFo-unsplash.jpg";
 import { Link } from "react-router-dom";
+import { Container } from "../components/styles/Container.styled";
+import { Title } from "../components/styles/Title.styled";
 
 const MainPage = () => {
   const body = document.querySelector("body");
@@ -9,8 +11,8 @@ const MainPage = () => {
   body.style.backgroundAttachment = "fixed";
 
   return (
-    <div className="main">
-      <h1 className="main__title">How are you feeling today?</h1>
+    <Container align="left" left="10%">
+      <Title>How are you feeling today?</Title>
       <ul className="main__list">
         <Link className="main__list--item sad" to="/mood/sad">
           sad
@@ -39,7 +41,7 @@ const MainPage = () => {
         entertainment options - whether you'd like to read a book, watch a movie
         or listen to some music.
       </p>
-    </div>
+    </Container>
   );
 };
 

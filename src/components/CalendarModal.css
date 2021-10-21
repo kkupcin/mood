@@ -1,14 +1,3 @@
-.modal-outer {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background-color: #333;
-    z-index: 2;
-    opacity: 0.8;
-}
-
 .modal--exit {
     color: white;
     font-size: 30px;
@@ -19,21 +8,7 @@
 
 .modal--exit:hover {
     cursor: pointer;
-}
-
-.modal-inner {
-    position: absolute;
-    z-index: 3;
-    top: 15%;
-    bottom: 15%;
-    left: 15%;
-    right: 15%;
-    background-color: white;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    border-radius: 50px;
-}   
+}  
 
 .modal--title {
     font-size: 48px;

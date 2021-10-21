@@ -2,6 +2,8 @@ import "./CalendarModal.css";
 import Parse from "parse";
 import React, { useEffect, useState } from "react";
 import LoadingSpinner from "./LoadingSpinner";
+import { OuterModal } from "./styles/OuterModal.styled";
+import { InnerModal } from "./styles/InnerModal.styled";
 
 const CalendarModal = (props) => {
   const [dayInfo, setDayInfo] = useState({});
@@ -66,10 +68,10 @@ const CalendarModal = (props) => {
 
   return (
     <React.Fragment>
-      <div className="modal-outer"></div>
+      <OuterModal />
       {isLoading && <LoadingSpinner />}
       {!isLoading && (
-        <div className="modal-inner">
+        <InnerModal>
           <div className='modal--exit' onClick={closeModalHandler}>X</div>
           <h1 className="modal--title">{`${props.month} ${props.day}`}</h1>
           <div className="modal-box">
@@ -107,7 +109,7 @@ const CalendarModal = (props) => {
               </div>
             </div>
           </div>
-        </div>
+        </InnerModal>
       )}
     </React.Fragment>
   );

@@ -3,6 +3,8 @@ import img3 from "../img/Group-1.jpg";
 import { useState } from "react";
 import Parse from "parse";
 import { Redirect } from "react-router-dom";
+import { Container } from "../components/styles/Container.styled";
+import { Title } from "../components/styles/Title.styled";
 
 const SignupPage = props => {
   const [signupInfo, setSignupInfo] = useState({
@@ -119,10 +121,10 @@ const SignupPage = props => {
   };
 
   return (
-    <div className="signup-box">
+    <Container left="15%" align="left">
       {signupSuccessful && <Redirect to="/" />}
       <div>
-        <h1 className="signup-title">Sign up to track your mood</h1>
+        <Title>Sign up to track your mood</Title>
         <form className="signup-form">
           <div className="signup-form__div">
             <label className="signup-form__div--label">Username</label>
@@ -166,7 +168,7 @@ const SignupPage = props => {
           </button>
         </form>
       </div>
-    </div>
+    </Container>
   );
 };
 

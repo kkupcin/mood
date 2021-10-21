@@ -4,6 +4,8 @@ import Parse from "parse";
 import React, { useEffect, useState } from "react";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { useParams } from "react-router";
+import { Container } from "../components/styles/Container.styled";
+import { Title } from "../components/styles/Title.styled";
 
 const MoodPage = (props) => {
   const body = document.querySelector("body");
@@ -115,6 +117,14 @@ const MoodPage = (props) => {
             author: moodInfo.book.get("author"),
           });
           break;
+        default:
+          setCurrInfo({
+            current: "book",
+            title: moodInfo.book.get("title"),
+            description: moodInfo.book.get("description"),
+            avatar: moodInfo.book.get("avatar"),
+            author: moodInfo.book.get("author"),
+          });
       }
     } else if (e.target.classList.contains("arrow-back")) {
       switch (currInfo.current) {
@@ -143,6 +153,14 @@ const MoodPage = (props) => {
             author: moodInfo.book.get("author"),
           });
           break;
+        default:
+          setCurrInfo({
+            current: "book",
+            title: moodInfo.book.get("title"),
+            description: moodInfo.book.get("description"),
+            avatar: moodInfo.book.get("avatar"),
+            author: moodInfo.book.get("author"),
+          });
       }
     }
   };
@@ -150,19 +168,23 @@ const MoodPage = (props) => {
   return (
     <React.Fragment>
       {isLoading && (
-        <div className="mood-page-container">
+        <Container>
           <LoadingSpinner className="mood-page" />
-        </div>
+        </Container>
       )}
       {!isLoading && (
-        <div className="mood-page-container">
-          <h1 className="mood-page__title">{`You are feeling ${mood}`}</h1>
+        <Container>
+          <Title>{`You are feeling ${mood}`}</Title>
           <div className="mood-page__content">
             <button
               className="arrow-back arrow fas fa-chevron-left"
               onClick={changeCurrShownHandler}
             ></button>
-            <img className="mood-page__content--img" src={currInfo.avatar} />
+            <img
+              className="mood-page__content--img"
+              src={currInfo.avatar}
+              alt={currInfo.title}
+            />
             <div className="mood-page__content--text">
               <h3>
                 {currInfo.author
@@ -176,7 +198,7 @@ const MoodPage = (props) => {
               onClick={changeCurrShownHandler}
             ></button>
           </div>
-        </div>
+        </Container>
       )}
     </React.Fragment>
   );

@@ -3,6 +3,8 @@ import img4 from "../img/ben-neale-29w9FiMWSr8-unsplash.jpg";
 import { useState } from "react";
 import Parse from "parse";
 import { Redirect } from "react-router-dom";
+import { Container } from "../components/styles/Container.styled";
+import { Title } from "../components/styles/Title.styled";
 
 const LoginPage = props => {
   const [loginInfo, setLoginInfo] = useState({
@@ -78,9 +80,9 @@ const LoginPage = props => {
   };
 
   return (
-    <div className="login-box">
+    <Container left="15%" align="left">
         {loginSuccessful && <Redirect to='/' />}
-      <h1 className="login-title">Log In</h1>
+      <Title>Log In</Title>
       <form className="login-form">
         <div className="login-form__div">
           <label className="login-form__div--label">Username</label>
@@ -104,7 +106,7 @@ const LoginPage = props => {
           Log me in
         </button>
       </form>
-    </div>
+    </Container>
   );
 };
 
