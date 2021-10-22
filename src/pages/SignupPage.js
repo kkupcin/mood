@@ -1,10 +1,9 @@
-import "./SignupPage.css";
 import img3 from "../img/Group-1.jpg";
 import { useState } from "react";
 import Parse from "parse";
 import { Redirect } from "react-router-dom";
 import { Container } from "../components/styles/Container.styled";
-import { Title } from "../components/styles/Title.styled";
+import { StyledForm } from "../components/styles/StyledForm.styled";
 
 const SignupPage = props => {
   const [signupInfo, setSignupInfo] = useState({
@@ -124,36 +123,32 @@ const SignupPage = props => {
     <Container left="15%" align="left">
       {signupSuccessful && <Redirect to="/" />}
       <div>
-        <Title>Sign up to track your mood</Title>
-        <form className="signup-form">
-          <div className="signup-form__div">
-            <label className="signup-form__div--label">Username</label>
+        <h1>Sign up to track your mood</h1>
+        <StyledForm>
+          <div>
+            <label>Username</label>
             <input
-              className="signup-form__div--input"
               type="text"
               onChange={usernameInputHandler}
             ></input>
           </div>
-          <div className="signup-form__div">
-            <label className="signup-form__div--label">Email</label>
+          <div>
+            <label>Email</label>
             <input
-              className="signup-form__div--input"
               type="email"
               onChange={emailInputHandler}
             ></input>
           </div>
-          <div className="signup-form__div">
-            <label className="signup-form__div--label">Password</label>
+          <div>
+            <label>Password</label>
             <input
-              className="signup-form__div--input"
               type="password"
               onChange={passwordInputHandler}
             ></input>
           </div>
-          <div className="signup-form__div">
-            <label className="signup-form__div--label">Confirm password</label>
+          <div>
+            <label>Confirm password</label>
             <input
-              className="signup-form__div--input"
               type="password"
               onChange={passwordCheckHandler}
               id="password-check"
@@ -161,12 +156,11 @@ const SignupPage = props => {
           </div>
           <button
             disabled={formValidationCheck()}
-            className="signup-form__button"
             onClick={signupFormSubmitHandler}
           >
             Sign me up
           </button>
-        </form>
+        </StyledForm>
       </div>
     </Container>
   );

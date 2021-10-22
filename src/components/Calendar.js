@@ -1,10 +1,14 @@
 import "./Calendar.css";
 import { setCalendarData } from "./calendarData";
 import CalendarModal from "./CalendarModal";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Parse from "parse";
-import { Container } from './styles/Container.styled'
-import { Title } from "./styles/Title.styled";
+import {
+  CalendarItem,
+  CalendarList,
+  ColorGuide,
+  StyledCalendar,
+} from "./styles/StyledCalendar.styled";
 
 let clickedNumber = "";
 
@@ -41,8 +45,7 @@ const Calendar = () => {
       if (
         getLocaleStringMonth(day.get("date")) ===
           getLocaleStringMonth(currentDate) &&
-          day.get("date").getFullYear() ===
-          currentDate.getFullYear()
+        day.get("date").getFullYear() === currentDate.getFullYear()
       ) {
         placeholderDataCopy[0].days[currIndex].mood = day.get("mood");
         placeholderDataCopy[0].days[currIndex].playlist =
@@ -67,27 +70,6 @@ const Calendar = () => {
   useEffect(() => {
     fetchData();
   }, []);
-
-  const applyDayColor = (index) => {
-    switch (daysInfo[0].days[index].mood) {
-      case "sad":
-        return "mood-sad";
-      case "adventurous":
-        return "mood-adventurous";
-      case "lonely":
-        return "mood-lonely";
-      case "excited":
-        return "mood-excited";
-      case "happy":
-        return "mood-happy";
-      case "nostalgic":
-        return "mood-nostalgic";
-      case "afraid":
-        return "mood-afraid";
-      default:
-        return "disabled";
-    }
-  };
 
   const openDayInfoHandler = (e) => {
     const clickedDay = daysInfo[0].days.filter(
@@ -116,7 +98,7 @@ const Calendar = () => {
   };
 
   return (
-    <Container left="40%">
+    <React.Fragment>
       {showModal && (
         <CalendarModal
           closeModal={closeModalHandler}
@@ -128,70 +110,70 @@ const Calendar = () => {
           mood={clickedDayInfo[0].mood}
         />
       )}
-      <div className="calendar__div">
-        <Title>Your Mood Calendar</Title>
-        <h3 className="calendar__div--month">
+      <StyledCalendar>
+        <h1>Your Mood Calendar</h1>
+        <h3>
           {currentDate.toLocaleString("en-US", {
             month: "long",
           })}
         </h3>
-        <div className="calendar__box">
+        <div>
           <button
             className={`arrow-back arrow fas fa-chevron-left `}
             onClick={changeMonthHandler}
           ></button>
-          <ul className="calendar__div--list">
+          <CalendarList>
             {daysInfo[0].days.map((day, index) => {
               return (
-                <li
+                <CalendarItem
                   onClick={openDayInfoHandler}
-                  className={`calendar__div--day ${applyDayColor(index)}`}
+                  mood={daysInfo[0].days[index].mood}
+                  className={daysInfo[0].days[index].mood.length === 0 ? "disabled" : ""}
                 >
-                  <span className="calendar__div--day--span">
-                    {!day.date ? index + 1 : day.date.getDate()}
-                  </span>
-                </li>
+                  <span>{!day.date ? index + 1 : day.date.getDate()}</span>
+                </CalendarItem>
               );
             })}
-          </ul>
+          </CalendarList>
           <button
             className={`arrow-forward arrow fas fa-chevron-right 
             `}
             onClick={changeMonthHandler}
           ></button>
         </div>
-      </div>
-      <ul className="color-guide">
-        <li className="color-guide__item">
-          <div className="calendar__div--day mood-sad"></div>
+      </StyledCalendar>
+
+      <ColorGuide>
+        <li>
+          <CalendarItem mood="sad"></CalendarItem>
           Sad
         </li>
-        <li className="color-guide__item">
-          <div className="calendar__div--day mood-lonely"></div>
+        <li>
+          <CalendarItem mood="lonely"></CalendarItem>
           Lonely
         </li>
-        <li className="color-guide__item">
-          <div className="calendar__div--day mood-happy"></div>
+        <li>
+          <CalendarItem mood="happy"></CalendarItem>
           Happy
         </li>
-        <li className="color-guide__item">
-          <div className="calendar__div--day mood-adventurous"></div>
+        <li>
+          <CalendarItem mood="adventurous"></CalendarItem>
           Adventurous
         </li>
-        <li className="color-guide__item">
-          <div className="calendar__div--day mood-nostalgic"></div>
+        <li>
+          <CalendarItem mood="nostalgic"></CalendarItem>
           Nostalgic
         </li>
-        <li className="color-guide__item">
-          <div className="calendar__div--day mood-afraid"></div>
+        <li>
+          <CalendarItem mood="afraid"></CalendarItem>
           Afraid
         </li>
-        <li className="color-guide__item">
-          <div className="calendar__div--day mood-excited"></div>
+        <li>
+          <CalendarItem mood="excited"></CalendarItem>
           Excited
         </li>
-      </ul>
-    </Container>
+      </ColorGuide>
+    </React.Fragment>
   );
 };
 

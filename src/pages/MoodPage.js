@@ -5,7 +5,6 @@ import React, { useEffect, useState } from "react";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { useParams } from "react-router";
 import { Container } from "../components/styles/Container.styled";
-import { Title } from "../components/styles/Title.styled";
 
 const MoodPage = (props) => {
   const body = document.querySelector("body");
@@ -174,7 +173,7 @@ const MoodPage = (props) => {
       )}
       {!isLoading && (
         <Container>
-          <Title>{`You are feeling ${mood}`}</Title>
+          <h1>{`You are feeling ${mood}`}</h1>
           <div className="mood-page__content">
             <button
               className="arrow-back arrow fas fa-chevron-left"

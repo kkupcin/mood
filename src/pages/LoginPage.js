@@ -1,10 +1,9 @@
-import "./LoginPage.css";
 import img4 from "../img/ben-neale-29w9FiMWSr8-unsplash.jpg";
 import { useState } from "react";
 import Parse from "parse";
 import { Redirect } from "react-router-dom";
 import { Container } from "../components/styles/Container.styled";
-import { Title } from "../components/styles/Title.styled";
+import { StyledForm } from "../components/styles/StyledForm.styled";
 
 const LoginPage = props => {
   const [loginInfo, setLoginInfo] = useState({
@@ -82,30 +81,28 @@ const LoginPage = props => {
   return (
     <Container left="15%" align="left">
         {loginSuccessful && <Redirect to='/' />}
-      <Title>Log In</Title>
-      <form className="login-form">
-        <div className="login-form__div">
-          <label className="login-form__div--label">Username</label>
+      <h1>Log In</h1>
+      <StyledForm>
+        <div>
+          <label>Username</label>
           <input
-            className="login-form__div--input"
             type="text"
             onChange={usernameInputHandler}
             value={loginInfo.username}
           ></input>
         </div>
-        <div className="login-form__div">
-          <label className="login-form__div--label">Password</label>
+        <div>
+          <label>Password</label>
           <input
-            className="login-form__div--input"
             type="password"
             onChange={passwordInputHandler}
             value={loginInfo.password}
           ></input>
         </div>
-        <button disabled={formValidationCheck()} className="login-form__button" onClick={loginFormSubmitHandler}>
+        <button disabled={formValidationCheck()} onClick={loginFormSubmitHandler}>
           Log me in
         </button>
-      </form>
+      </StyledForm>
     </Container>
   );
 };
