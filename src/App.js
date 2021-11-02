@@ -41,7 +41,7 @@ function App() {
           {!isLoggedIn ? <Redirect to="/" /> : <CalendarPage />}
         </Route>
         <Route path='/mood/:mood' >
-          <MoodPage />
+          <MoodPage isLoggedIn={isLoggedIn}/>
         </Route>
         <Route exact path="/">
           <MainPage />

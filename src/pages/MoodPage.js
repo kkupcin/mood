@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { useParams } from "react-router";
 import { Container } from "../components/styles/Container.styled";
+import NotLoggedInPage from "./NotLoggedInPage";
 
 const MoodPage = (props) => {
   const body = document.querySelector("body");
@@ -15,11 +16,18 @@ const MoodPage = (props) => {
   const [isLoading, setIsLoading] = useState(true);
   const [moodInfo, setMoodInfo] = useState({});
   const [currInfo, setCurrInfo] = useState({});
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const { mood } = useParams();
 
   useEffect(() => {
-    setMood(mood);
-  }, []);
+    if (props.isLoggedIn) {
+      setIsLoggedIn(true);
+      setMood(mood);
+    } else {
+      setIsLoggedIn(false);
+      setIsLoading(false)
+    }
+  }, [props.isLoggedIn]);
 
   const setBook = async (mood) => {
     const query = new Parse.Query("Book");
@@ -171,34 +179,39 @@ const MoodPage = (props) => {
           <LoadingSpinner className="mood-page" />
         </Container>
       )}
-      {!isLoading && (
-        <Container>
-          <h1>{`You are feeling ${mood}`}</h1>
-          <div className="mood-page__content">
-            <button
-              className="arrow-back arrow fas fa-chevron-left"
-              onClick={changeCurrShownHandler}
-            ></button>
-            <img
-              className="mood-page__content--img"
-              src={currInfo.avatar}
-              alt={currInfo.title}
-            />
-            <div className="mood-page__content--text">
-              <h3>
-                {currInfo.author
-                  ? `${currInfo.title} by ${currInfo.author}`
-                  : currInfo.title}
-              </h3>
-              <p>{currInfo.description}</p>
+      {!isLoading &&
+        !isLoggedIn && (
+          <NotLoggedInPage />
+        )}
+      {!isLoading &&
+        isLoggedIn && (
+          <Container>
+            <h1>{`You are feeling ${mood}`}</h1>
+            <div className="mood-page__content">
+              <button
+                className="arrow-back arrow fas fa-chevron-left"
+                onClick={changeCurrShownHandler}
+              ></button>
+              <img
+                className="mood-page__content--img"
+                src={currInfo.avatar}
+                alt={currInfo.title}
+              />
+              <div className="mood-page__content--text">
+                <h3>
+                  {currInfo.author
+                    ? `${currInfo.title} by ${currInfo.author}`
+                    : currInfo.title}
+                </h3>
+                <p>{currInfo.description}</p>
+              </div>
+              <button
+                className="arrow-forward arrow fas fa-chevron-right"
+                onClick={changeCurrShownHandler}
+              ></button>
             </div>
-            <button
-              className="arrow-forward arrow fas fa-chevron-right"
-              onClick={changeCurrShownHandler}
-            ></button>
-          </div>
-        </Container>
-      )}
+          </Container>
+        )}
     </React.Fragment>
   );
 };
