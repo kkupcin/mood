@@ -1,13 +1,13 @@
-import "./LoadingSpinner.css";
+import { StyledLoadingSpinner } from "./styles/StyledLoadingSpinner.styled";
 
 const LoadingSpinner = (props) => {
   return (
-    <div className={`lds-ellipsis ${props.className}`}>
+    <StyledLoadingSpinner className={props.className}>
       <div></div>
       <div></div>
       <div></div>
       <div></div>
-    </div>
+    </StyledLoadingSpinner>
   );
 };
 

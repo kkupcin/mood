@@ -1,4 +1,3 @@
-import "./Calendar.css";
 import { setCalendarData } from "./calendarData";
 import CalendarModal from "./CalendarModal";
 import React, { useEffect, useState } from "react";
@@ -8,17 +7,22 @@ import {
   CalendarList,
   ColorGuide,
   StyledCalendar,
+  StyledCalendarContainer,
+  Arrow,
 } from "./styles/StyledCalendar.styled";
 
 let clickedNumber = "";
 
-const Calendar = () => {
+const Calendar = (props) => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [daysInfo, setDaysInfo] = useState(setCalendarData(currentDate));
   const [fetchedDays, setFetchedDays] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [clickedDayInfo, setClickedDayInfo] = useState([]);
-  const [monthIsEmpty, setMonthIsEmpty] = useState(false);
+  const [monthsFilled, setMonthsFilled] = useState({
+    firstDate: currentDate,
+    lastDate: currentDate,
+  });
 
   const fetchData = async () => {
     const query = new Parse.Query("Day");
@@ -34,13 +38,22 @@ const Calendar = () => {
 
   const getDate = () => {
     let placeholderData = setCalendarData(currentDate);
-    // if (fetchedDays.length === 0) {
-    //   setMonthIsEmpty(true);
-    // }
+
+    let checkFirstMonth =
+      (fetchedDays[0] && fetchedDays[0].get("date")) || new Date();
+    let checkLastMonth = new Date();
 
     let placeholderDataCopy = [...placeholderData];
     fetchedDays.forEach((day) => {
       let currIndex = day.get("date").getDate() - 1;
+
+      if (day.get("date") < checkFirstMonth) {
+        checkFirstMonth = day.get("date");
+      }
+
+      if (day.get("date") > checkLastMonth) {
+        checkLastMonth = day.get("date");
+      }
 
       if (
         getLocaleStringMonth(day.get("date")) ===
@@ -56,6 +69,11 @@ const Calendar = () => {
       }
     });
 
+    setMonthsFilled({
+      firstDate: checkFirstMonth,
+      lastDate: checkLastMonth,
+    });
+
     setDaysInfo(placeholderDataCopy);
   };
 
@@ -64,12 +82,12 @@ const Calendar = () => {
   };
 
   useEffect(() => {
-    getDate();
-  }, [fetchedDays, currentDate]);
-
-  useEffect(() => {
     fetchData();
   }, []);
+
+  useEffect(() => {
+    getDate();
+  }, [fetchedDays, currentDate]);
 
   const openDayInfoHandler = (e) => {
     const clickedDay = daysInfo[0].days.filter(
@@ -89,9 +107,9 @@ const Calendar = () => {
 
   const changeMonthHandler = (e) => {
     let date = new Date(currentDate);
-    if (e.target.classList.contains("arrow-forward")) {
+    if (e.target.id === "arrow-forward") {
       date.setMonth(date.getMonth() + 1);
-    } else if (e.target.classList.contains("arrow-back")) {
+    } else if (e.target.id === "arrow-back") {
       date.setMonth(date.getMonth() - 1);
     }
     setCurrentDate(date);
@@ -103,76 +121,107 @@ const Calendar = () => {
         <CalendarModal
           closeModal={closeModalHandler}
           data={clickedDayInfo}
+          year={currentDate.getFullYear()}
           month={currentDate.toLocaleString("en-US", {
             month: "long",
           })}
+          monthIndex={currentDate.getMonth() + 1}
           day={clickedNumber}
           mood={clickedDayInfo[0].mood}
         />
       )}
-      <StyledCalendar>
-        <h1>Your Mood Calendar</h1>
-        <h3>
-          {currentDate.toLocaleString("en-US", {
-            month: "long",
-          })}
-        </h3>
-        <div>
-          <button
-            className={`arrow-back arrow fas fa-chevron-left `}
-            onClick={changeMonthHandler}
-          ></button>
-          <CalendarList>
-            {daysInfo[0].days.map((day, index) => {
-              return (
-                <CalendarItem
-                  onClick={openDayInfoHandler}
-                  mood={daysInfo[0].days[index].mood}
-                  className={daysInfo[0].days[index].mood.length === 0 ? "disabled" : ""}
-                >
-                  <span>{!day.date ? index + 1 : day.date.getDate()}</span>
-                </CalendarItem>
-              );
+      <StyledCalendarContainer>
+        <StyledCalendar>
+          <h1>Your Mood Calendar</h1>
+          <h3>
+            {currentDate.toLocaleString("en-US", {
+              month: "long",
             })}
-          </CalendarList>
-          <button
-            className={`arrow-forward arrow fas fa-chevron-right 
-            `}
-            onClick={changeMonthHandler}
-          ></button>
-        </div>
-      </StyledCalendar>
+          </h3>
+          <div>
+            <Arrow
+              position="left"
+              visible={
+                currentDate.getMonth() - 1 >= monthsFilled.firstDate.getMonth()
+              }
+              disabled={
+                !(
+                  currentDate.getMonth() - 1 >=
+                  monthsFilled.firstDate.getMonth()
+                )
+              }
+              id="arrow-back"
+              className="fas fa-chevron-left"
+              onClick={changeMonthHandler}
+            ></Arrow>
+            <CalendarList>
+              {daysInfo[0].days.map((day, index) => {
+                return (
+                  <CalendarItem
+                    onClick={openDayInfoHandler}
+                    mood={daysInfo[0].days[index].mood}
+                    className={
+                      currentDate.getFullYear() === new Date().getFullYear() &&
+                      currentDate.getMonth() === new Date().getMonth() &&
+                      index >= new Date().getDate()
+                        ? "disabled"
+                        : ""
+                    }
+                  >
+                    <span>{!day.date ? index + 1 : day.date.getDate()}</span>
+                  </CalendarItem>
+                );
+              })}
+            </CalendarList>
+            <Arrow
+              position="right"
+              visible={
+                currentDate.getMonth() + 1 <= monthsFilled.lastDate.getMonth()
+              }
+              disabled={
+                !(
+                  currentDate.getMonth() + 1 <=
+                  monthsFilled.lastDate.getMonth()
+                )
+              }
+              id="arrow-forward"
+              className="fas fa-chevron-right"
+              onClick={changeMonthHandler}
+            ></Arrow>
+          </div>
+        </StyledCalendar>
 
-      <ColorGuide>
-        <li>
-          <CalendarItem mood="sad"></CalendarItem>
-          Sad
-        </li>
-        <li>
-          <CalendarItem mood="lonely"></CalendarItem>
-          Lonely
-        </li>
-        <li>
-          <CalendarItem mood="happy"></CalendarItem>
-          Happy
-        </li>
-        <li>
-          <CalendarItem mood="adventurous"></CalendarItem>
-          Adventurous
-        </li>
-        <li>
-          <CalendarItem mood="nostalgic"></CalendarItem>
-          Nostalgic
-        </li>
-        <li>
-          <CalendarItem mood="afraid"></CalendarItem>
-          Afraid
-        </li>
-        <li>
-          <CalendarItem mood="excited"></CalendarItem>
-          Excited
-        </li>
-      </ColorGuide>
+        <ColorGuide>
+          <li>
+            <CalendarItem mood="sad"></CalendarItem>
+            Sad
+          </li>
+          <li>
+            <CalendarItem mood="lonely"></CalendarItem>
+            Lonely
+          </li>
+          <li>
+            <CalendarItem mood="happy"></CalendarItem>
+            Happy
+          </li>
+          <li>
+            <CalendarItem mood="adventurous"></CalendarItem>
+            Adventurous
+          </li>
+          <li>
+            <CalendarItem mood="nostalgic"></CalendarItem>
+            Nostalgic
+          </li>
+          <li>
+            <CalendarItem mood="afraid"></CalendarItem>
+            Afraid
+          </li>
+          <li>
+            <CalendarItem mood="excited"></CalendarItem>
+            Excited
+          </li>
+        </ColorGuide>
+      </StyledCalendarContainer>
     </React.Fragment>
   );
 };
