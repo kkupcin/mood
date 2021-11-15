@@ -1,36 +1,43 @@
-import img1 from "../img/leone-venter-VieM9BdZKFo-unsplash.jpg";
 import { Container } from "../components/styles/Container.styled";
-import { StyledLink, StyledMainContent, StyledPara } from "../components/styles/StyledMainContent.styled";
+import {
+  StyledLink,
+  StyledMainContent,
+  StyledPara,
+} from "../components/styles/StyledMainContent.styled";
 
-const MainPage = () => {
+const MainPage = (props) => {
   const body = document.querySelector("body");
-  body.style.backgroundImage = `url(${img1})`;
-  body.style.backgroundPosition = "right";
-  body.style.backgroundAttachment = "fixed";
+  body.className = "img1"
+
+  const newDate = new Date();
+
+  const date = `${newDate.getFullYear()}-${
+    newDate.getMonth() + 1
+  }-${newDate.getDate()}`;
 
   return (
     <Container align="left" left="10%">
       <h1>How are you feeling today?</h1>
       <StyledMainContent>
-        <StyledLink mood="sad" to="/mood/sad">
+        <StyledLink mood="sad" to={`/mood/sad/${date}`}>
           sad
         </StyledLink>
-        <StyledLink mood="adventurous" to="/mood/adventurous">
+        <StyledLink mood="adventurous" to={`/mood/adventurous/${date}`}>
           adventurous
         </StyledLink>
-        <StyledLink mood="excited" to="/mood/excited">
+        <StyledLink mood="excited" to={`/mood/excited/${date}`}>
           excited
         </StyledLink>
-        <StyledLink mood="afraid" to="/mood/afraid">
+        <StyledLink mood="afraid" to={`/mood/afraid/${date}`}>
           afraid
         </StyledLink>
-        <StyledLink mood="nostalgic" to="/mood/nostalgic">
+        <StyledLink mood="nostalgic" to={`/mood/nostalgic/${date}`}>
           nostalgic
         </StyledLink>
-        <StyledLink mood="happy" to="/mood/happy">
+        <StyledLink mood="happy" to={`/mood/happy/${date}`}>
           happy
         </StyledLink>
-        <StyledLink mood="lonely" to="/mood/lonely">
+        <StyledLink mood="lonely" to={`/mood/lonely/${date}`}>
           lonely
         </StyledLink>
       </StyledMainContent>

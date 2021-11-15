@@ -1,13 +1,10 @@
-import Calendar from '../components/Calendar'
-import img2 from '../img/tim-chow-9IcKPSQ9G5Q-unsplash.jpg'
+import Calendar from "../components/Calendar";
 
 const CalendarPage = () => {
-    const body = document.querySelector('body')
-    body.style.backgroundImage = `url(${img2})`
-    body.style.backgroundPosition = 'top'
-    body.style.backgroundAttachment = 'fixed'
+  const body = document.querySelector("body");
+  body.className = "img2";
 
-    return <Calendar />
-}
+  return <Calendar />;
+};
 
-export default CalendarPage
+export default CalendarPage;

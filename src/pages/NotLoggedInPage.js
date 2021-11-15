@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import { Container } from "../components/styles/Container.styled";
 import { StyledLink, Warning } from "../components/styles/Warning.styled";
 

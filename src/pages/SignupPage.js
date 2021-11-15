@@ -1,11 +1,10 @@
-import img3 from "../img/Group-1.jpg";
 import { useState } from "react";
 import Parse from "parse";
 import { Redirect } from "react-router-dom";
 import { Container } from "../components/styles/Container.styled";
 import { StyledForm } from "../components/styles/StyledForm.styled";
 
-const SignupPage = props => {
+const SignupPage = (props) => {
   const [signupInfo, setSignupInfo] = useState({
     username: "",
     email: "",
@@ -16,12 +15,6 @@ const SignupPage = props => {
   const [isUsernameEmpty, setIsUsernameEmpty] = useState(true);
   const [isPasswordEmpty, setIsPasswordEmpty] = useState(true);
   const [isEmailEmpty, setIsEmailEmpty] = useState(true);
-
-  // TODO
-  // add error if user already exists
-  // add error screen if signup failed
-  // add css cues if username too short, email invalid
-  // add css cue that password does not match
 
   const usernameInputHandler = (e) => {
     setSignupInfo((prevState) => {
@@ -84,9 +77,7 @@ const SignupPage = props => {
   };
 
   const body = document.querySelector("body");
-  body.style.backgroundImage = `url(${img3})`;
-  body.style.backgroundPosition = "right";
-  body.style.backgroundAttachment = "fixed";
+  body.className = "img3";
 
   const signupFormSubmitHandler = async (e) => {
     e.preventDefault();
@@ -111,11 +102,11 @@ const SignupPage = props => {
       newUser.setEmail(emailValue);
       newUser.save();
       setSignupSuccessful(true);
-      props.loginHandler(true)
+      props.loginHandler(true);
     } catch (err) {
       alert(err);
       setSignupSuccessful(false);
-      props.loginHandler(false)
+      props.loginHandler(false);
     }
   };
 
@@ -127,24 +118,15 @@ const SignupPage = props => {
         <StyledForm>
           <div>
             <label>Username</label>
-            <input
-              type="text"
-              onChange={usernameInputHandler}
-            ></input>
+            <input type="text" onChange={usernameInputHandler}></input>
           </div>
           <div>
             <label>Email</label>
-            <input
-              type="email"
-              onChange={emailInputHandler}
-            ></input>
+            <input type="email" onChange={emailInputHandler}></input>
           </div>
           <div>
             <label>Password</label>
-            <input
-              type="password"
-              onChange={passwordInputHandler}
-            ></input>
+            <input type="password" onChange={passwordInputHandler}></input>
           </div>
           <div>
             <label>Confirm password</label>

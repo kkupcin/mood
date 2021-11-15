@@ -1,31 +1,29 @@
-import "./MoodPage.css";
-import img5 from "../img/david-van-dijk-3LTht2nxd34-unsplash.jpg";
 import Parse from "parse";
 import React, { useEffect, useState } from "react";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { useParams } from "react-router";
 import { Container } from "../components/styles/Container.styled";
 import NotLoggedInPage from "./NotLoggedInPage";
+import { Arrow } from "../components/styles/StyledCalendar.styled";
+import { StyledMoodContent } from "../components/styles/StyledMoodContent.styled";
 
 const MoodPage = (props) => {
   const body = document.querySelector("body");
-  body.style.backgroundImage = `url(${img5})`;
-  body.style.backgroundPosition = "right";
-  body.style.backgroundAttachment = "fixed";
+  body.className = "img5";
 
   const [isLoading, setIsLoading] = useState(true);
   const [moodInfo, setMoodInfo] = useState({});
   const [currInfo, setCurrInfo] = useState({});
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const { mood } = useParams();
+  const { mood, date } = useParams();
 
   useEffect(() => {
     if (props.isLoggedIn) {
       setIsLoggedIn(true);
-      setMood(mood);
+      setMood(mood, date);
     } else {
       setIsLoggedIn(false);
-      setIsLoading(false)
+      setIsLoading(false);
     }
   }, [props.isLoggedIn]);
 
@@ -56,22 +54,62 @@ const MoodPage = (props) => {
     return results[randomIndex];
   };
 
-  const setMood = async (mood) => {
+  const setMood = async (mood, date) => {
     try {
       setIsLoading(true);
-      const date = new Date();
+      const providedDate = new Date(date);
       const Day = new Parse.Object("Day");
       const book = await setBook(mood);
       const movie = await setMovie(mood);
       const playlist = await setPlaylist(mood);
+
+      const dayQuery = new Parse.Query("Day");
+      dayQuery.equalTo("user", Parse.User.current());
+      let results = await dayQuery.find();
+
+      let day = providedDate.getDate();
+      let month = providedDate.getMonth();
+      let year = providedDate.getFullYear();
+
+      if (results.length > 0) {
+        const foundResult = results.find((result) => {
+          let resultDay = result.get("date").getDate();
+          let resultMonth = result.get("date").getMonth();
+          let resultYear = result.get("date").getFullYear();
+          if (
+            day === resultDay &&
+            month === resultMonth &&
+            year === resultYear
+          ) {
+            return result;
+          }
+        });
+        if (foundResult) {
+          foundResult.set("date", providedDate);
+          foundResult.set("user", Parse.User.current());
+          foundResult.set("mood", mood);
+          foundResult.set("book", book);
+          foundResult.set("movie", movie);
+          foundResult.set("playlist", playlist);
+
+          await foundResult.save();
+        } else {
+          Day.set("date", providedDate);
+          Day.set("user", Parse.User.current());
+          Day.set("mood", mood);
+          Day.set("book", book);
+          Day.set("movie", movie);
+          Day.set("playlist", playlist);
+
+          await Day.save();
+        }
+      }
 
       setMoodInfo({
         book: book,
         movie: movie,
         playlist: playlist,
       });
-
-      console.log(book);
 
       setCurrInfo({
         current: "book",
@@ -81,14 +119,6 @@ const MoodPage = (props) => {
         author: book.get("author"),
       });
 
-      Day.set("date", date);
-      Day.set("user", Parse.User.current());
-      Day.set("mood", mood);
-      Day.set("book", book);
-      Day.set("movie", movie);
-      Day.set("playlist", playlist);
-
-      await Day.save();
       setIsLoading(false);
     } catch (err) {
       setIsLoading(false);
@@ -97,7 +127,7 @@ const MoodPage = (props) => {
   };
 
   const changeCurrShownHandler = (e) => {
-    if (e.target.classList.contains("arrow-forward")) {
+    if (e.target.id === "arrow-forward") {
       switch (currInfo.current) {
         case "book":
           setCurrInfo({
@@ -133,7 +163,7 @@ const MoodPage = (props) => {
             author: moodInfo.book.get("author"),
           });
       }
-    } else if (e.target.classList.contains("arrow-back")) {
+    } else if (e.target.id === "arrow-back") {
       switch (currInfo.current) {
         case "book":
           setCurrInfo({
@@ -179,39 +209,45 @@ const MoodPage = (props) => {
           <LoadingSpinner className="mood-page" />
         </Container>
       )}
-      {!isLoading &&
-        !isLoggedIn && (
-          <NotLoggedInPage />
-        )}
-      {!isLoading &&
-        isLoggedIn && (
-          <Container>
-            <h1>{`You are feeling ${mood}`}</h1>
-            <div className="mood-page__content">
-              <button
-                className="arrow-back arrow fas fa-chevron-left"
-                onClick={changeCurrShownHandler}
-              ></button>
-              <img
-                className="mood-page__content--img"
-                src={currInfo.avatar}
-                alt={currInfo.title}
-              />
-              <div className="mood-page__content--text">
+      {!isLoading && !isLoggedIn && <NotLoggedInPage />}
+      {!isLoading && isLoggedIn && (
+        <Container left="68px" className="mood-page">
+          <h1>{`You are feeling ${mood}`}</h1>
+          <StyledMoodContent>
+            <Arrow
+              position="left"
+              id="arrow-back"
+              className="fas fa-chevron-left"
+              onClick={changeCurrShownHandler}
+            ></Arrow>
+            <div className="outer-mood-page-carousel">
+              <img src={currInfo.avatar} alt={currInfo.title} />
+              <div>
                 <h3>
                   {currInfo.author
                     ? `${currInfo.title} by ${currInfo.author}`
                     : currInfo.title}
                 </h3>
-                <p>{currInfo.description}</p>
+                <p>
+                  {currInfo.current === "playlist" ? (
+                    <a href={currInfo.description} target="_blank">
+                      Go to Spotify &#62;
+                    </a>
+                  ) : (
+                    currInfo.description
+                  )}
+                </p>
               </div>
-              <button
-                className="arrow-forward arrow fas fa-chevron-right"
-                onClick={changeCurrShownHandler}
-              ></button>
             </div>
-          </Container>
-        )}
+            <Arrow
+              position="right"
+              id="arrow-forward"
+              className="fas fa-chevron-right"
+              onClick={changeCurrShownHandler}
+            ></Arrow>
+          </StyledMoodContent>
+        </Container>
+      )}
     </React.Fragment>
   );
 };
