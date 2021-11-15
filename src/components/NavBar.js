@@ -1,56 +1,76 @@
-import "./NavBar.css";
-import { Link, NavLink } from "react-router-dom";
 import Parse from "parse";
+import {
+  NavBarLink,
+  NavBarLogo,
+  StyledNavBar,
+} from "./styles/StyledNavBar.styled";
+import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 
 const NavBar = (props) => {
-    const logOutHandler = async () => {
-        await Parse.User.logOut()
-        props.isLoggedInHandler(false)
+  const [showHamburgerMenu, setShowHamburgerMenu] = useState(false);
+  // If user logs out, pass that to App.js
+  const logOutHandler = async () => {
+    await Parse.User.logOut();
+    props.isLoggedInHandler(false);
+  };
+
+  // Location taken from React-Router-DOM
+  let location = useLocation();
+
+  // Using location to hide Hamburger menu when it changes
+  useEffect(() => {
+    setShowHamburgerMenu(false);
+  }, [location]);
+
+  // Hamburger menu button click listener to show or hide child nodes (menu)
+  const displayHamburgerMenu = () => {
+    if (showHamburgerMenu) {
+      setShowHamburgerMenu(false);
+    } else {
+      setShowHamburgerMenu(true);
     }
+  };
 
   return (
-    <div className="navbar">
-      <Link to="/" className="navbar__logo">
+    <StyledNavBar>
+      <NavBarLogo to="/" id="logo">
         -Mood-
-      </Link>
-      {props.isLoggedIn && (
-        <div className="navbar__links">
-          <NavLink
-            to="/calendar"
-            activeClassName="active"
-            className="navbar__links--link"
-          >
-            Mood Calendar
-          </NavLink>
-          <NavLink
-            onClick={logOutHandler}
-            to="/"
-            activeClassName="active"
-            className="navbar__links--link"
-          >
-            Log Out
-          </NavLink>
+      </NavBarLogo>
+      <div
+        className={`hamburger ${showHamburgerMenu ? "active-hamburger" : ""}`}
+      >
+        <i className="fas fa-bars" onClick={displayHamburgerMenu}></i>
+        <div>
+          {props.isLoggedIn && (
+            <React.Fragment>
+              <NavBarLink to="/calendar" activeClassName="active">
+                Mood Calendar
+              </NavBarLink>
+              <NavBarLink
+                onClick={logOutHandler}
+                to="/"
+                activeClassName="active"
+              >
+                Log Out
+              </NavBarLink>
+            </React.Fragment>
+          )}
+          {!props.isLoggedIn && (
+            <React.Fragment>
+              <div>
+                <NavBarLink to="/login" activeClassName="active">
+                  Login
+                </NavBarLink>
+                <NavBarLink to="/signup" activeClassName="active">
+                  Sign Up
+                </NavBarLink>
+              </div>
+            </React.Fragment>
+          )}
         </div>
-      )}
-      {!props.isLoggedIn && (
-        <div className="navbar__links">
-          <NavLink
-            to="/login"
-            activeClassName="active"
-            className="navbar__links--link"
-          >
-            Login
-          </NavLink>
-          <NavLink
-            to="/signup"
-            activeClassName="active"
-            className="navbar__links--link"
-          >
-            Sign Up
-          </NavLink>
-        </div>
-      )}
-    </div>
+      </div>
+    </StyledNavBar>
   );
 };
 
