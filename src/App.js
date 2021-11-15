@@ -9,15 +9,18 @@ import Parse from "parse";
 import { useEffect, useState } from "react";
 import MoodPage from "./pages/MoodPage";
 
+// Parse initialization
 const PARSE_APPLICATION_ID = process.env.REACT_APP_API_KEY;
 const PARSE_HOST_URL = "https://parseapi.back4app.com/";
 const PARSE_JAVASCRIPT_KEY = process.env.REACT_APP_JS_KEY;
 Parse.initialize(PARSE_APPLICATION_ID, PARSE_JAVASCRIPT_KEY);
 Parse.serverURL = PARSE_HOST_URL;
+
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
+    // Check if there is a user already logged in
     if (Parse.User.current()) {
       setIsLoggedIn(true);
     }
@@ -38,10 +41,10 @@ function App() {
           <SignupPage loginHandler={loginHandler} />
         </Route>
         <Route path="/calendar">
-          {!isLoggedIn ? <Redirect to="/" /> : <CalendarPage />}
+          {isLoggedIn ? <CalendarPage /> : <Redirect to="/" />}
         </Route>
-        <Route path='/mood/:mood' >
-          <MoodPage isLoggedIn={isLoggedIn}/>
+        <Route path="/mood/:mood/:date">
+          <MoodPage isLoggedIn={isLoggedIn} />
         </Route>
         <Route exact path="/">
           <MainPage />
