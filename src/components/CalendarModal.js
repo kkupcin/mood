@@ -11,6 +11,7 @@ const CalendarModal = (props) => {
   const [infoAvailable, setInfoAvailable] = useState(false);
 
   useEffect(() => {
+    // Fetches data to display in modal from Parse
     const retrieveData = async () => {
       setIsLoading(true);
       if (props.data[0].mood !== "") {
@@ -40,6 +41,7 @@ const CalendarModal = (props) => {
           const movieTitle = fetchedMovie[0].get("title");
           const movieAvatar = fetchedMovie[0].get("avatar");
 
+          // Sets data to display in modal
           setDayInfo({
             book: {
               title: bookTitle,
@@ -70,12 +72,14 @@ const CalendarModal = (props) => {
     retrieveData();
   }, []);
 
+  // Close modal if 'ESC' button is pressed
   window.addEventListener("keyup", (e) => {
     if (e.key === "Escape") {
       closeModalHandler();
     }
   });
 
+  // Close modal if 'X' is clicked
   const closeModalHandler = () => {
     props.closeModal(true);
   };

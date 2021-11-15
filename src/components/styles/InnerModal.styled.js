@@ -27,7 +27,7 @@ export const InnerModal = styled.div`
     padding: 50px;
   }
 
-  @media screen and (max-width: 700px) {
+  @media screen and (max-width: 900px) {
     
   }
 `;
@@ -67,9 +67,10 @@ export const ModalBox = styled.div`
 
   @media screen and (max-width: 1200px) {
     padding: 0;
-    div {
+  }
+
+  @media screen and (max-width: 900px) {
       
-    }
   }
 `;
 
