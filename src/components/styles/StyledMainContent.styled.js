@@ -60,10 +60,6 @@ export const StyledLink = styled(Link)`
   @media screen and (max-width: 900px) {
     padding: 14px 28px;
   }
-
-  @media screen and (max-width: 700px) {
-    
-  }
 `;
 
 export const StyledPara = styled.p`

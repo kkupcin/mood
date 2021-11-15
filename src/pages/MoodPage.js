@@ -8,26 +8,29 @@ import { Arrow } from "../components/styles/StyledCalendar.styled";
 import { StyledMoodContent } from "../components/styles/StyledMoodContent.styled";
 
 const MoodPage = (props) => {
+  // Add background image class for styling
   const body = document.querySelector("body");
   body.className = "img5";
 
   const [isLoading, setIsLoading] = useState(true);
-  const [moodInfo, setMoodInfo] = useState({});
-  const [currInfo, setCurrInfo] = useState({});
+  const [currDayInfo, setCurrDayInfo] = useState({});
+  const [currShown, setCurrShown] = useState({});
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  // Takes mood and date from the URL
   const { mood, date } = useParams();
 
   useEffect(() => {
     if (props.isLoggedIn) {
       setIsLoggedIn(true);
-      setMood(mood, date);
+      setDayInfo(mood, date);
     } else {
       setIsLoggedIn(false);
       setIsLoading(false);
     }
   }, [props.isLoggedIn]);
 
-  const setBook = async (mood) => {
+  // Assigns random book from Parse based on mood
+  const setRandomBook = async (mood) => {
     const query = new Parse.Query("Book");
     query.equalTo("mood", mood);
     const results = await query.find();
@@ -36,7 +39,8 @@ const MoodPage = (props) => {
     return results[randomIndex];
   };
 
-  const setPlaylist = async (mood) => {
+  // Assigns random playlist from Parse based on mood
+  const setRandomPlaylist = async (mood) => {
     const query = new Parse.Query("Playlist");
     query.equalTo("mood", mood);
     const results = await query.find();
@@ -45,7 +49,8 @@ const MoodPage = (props) => {
     return results[randomIndex];
   };
 
-  const setMovie = async (mood) => {
+  // Assigns random movie from Parse based on mood
+  const setRandomMovie = async (mood) => {
     const query = new Parse.Query("Movie");
     query.equalTo("mood", mood);
     const results = await query.find();
@@ -54,23 +59,29 @@ const MoodPage = (props) => {
     return results[randomIndex];
   };
 
-  const setMood = async (mood, date) => {
+  // Either creates a new "Day" entry or adjusts the currently existing entry from same day
+  const setDayInfo = async (mood, date) => {
     try {
       setIsLoading(true);
       const providedDate = new Date(date);
       const Day = new Parse.Object("Day");
-      const book = await setBook(mood);
-      const movie = await setMovie(mood);
-      const playlist = await setPlaylist(mood);
 
+      // Assigns random data from Parse
+      const book = await setRandomBook(mood);
+      const movie = await setRandomMovie(mood);
+      const playlist = await setRandomPlaylist(mood);
+
+      // Looks if Parse object for for same day already exists
       const dayQuery = new Parse.Query("Day");
       dayQuery.equalTo("user", Parse.User.current());
       let results = await dayQuery.find();
 
+      // Gets date for search
       let day = providedDate.getDate();
       let month = providedDate.getMonth();
       let year = providedDate.getFullYear();
 
+      // Checks if dates match with any found entries
       if (results.length > 0) {
         const foundResult = results.find((result) => {
           let resultDay = result.get("date").getDate();
@@ -84,6 +95,8 @@ const MoodPage = (props) => {
             return result;
           }
         });
+
+        // If entry exists, changes found values to newly generated values
         if (foundResult) {
           foundResult.set("date", providedDate);
           foundResult.set("user", Parse.User.current());
@@ -94,6 +107,7 @@ const MoodPage = (props) => {
 
           await foundResult.save();
         } else {
+          // If entry does not exist, creates a new entry for given date
           Day.set("date", providedDate);
           Day.set("user", Parse.User.current());
           Day.set("mood", mood);
@@ -105,13 +119,15 @@ const MoodPage = (props) => {
         }
       }
 
-      setMoodInfo({
+      // Sets info for later getting details to display
+      setCurrDayInfo({
         book: book,
         movie: movie,
         playlist: playlist,
       });
 
-      setCurrInfo({
+      // Sets first currently shown info
+      setCurrShown({
         current: "book",
         title: book.get("title"),
         description: book.get("description"),
@@ -126,77 +142,78 @@ const MoodPage = (props) => {
     }
   };
 
+  // Changes the currently shown information (loops through currShown)
   const changeCurrShownHandler = (e) => {
     if (e.target.id === "arrow-forward") {
-      switch (currInfo.current) {
+      switch (currShown.current) {
         case "book":
-          setCurrInfo({
+          setCurrShown({
             current: "movie",
-            title: moodInfo.movie.get("title"),
-            description: moodInfo.movie.get("description"),
-            avatar: moodInfo.movie.get("avatar"),
+            title: currDayInfo.movie.get("title"),
+            description: currDayInfo.movie.get("description"),
+            avatar: currDayInfo.movie.get("avatar"),
           });
           break;
         case "movie":
-          setCurrInfo({
+          setCurrShown({
             current: "playlist",
-            title: moodInfo.playlist.get("title"),
-            description: moodInfo.playlist.get("link"),
-            avatar: moodInfo.playlist.get("avatar"),
+            title: currDayInfo.playlist.get("title"),
+            description: currDayInfo.playlist.get("link"),
+            avatar: currDayInfo.playlist.get("avatar"),
           });
           break;
         case "playlist":
-          setCurrInfo({
+          setCurrShown({
             current: "book",
-            title: moodInfo.book.get("title"),
-            description: moodInfo.book.get("description"),
-            avatar: moodInfo.book.get("avatar"),
-            author: moodInfo.book.get("author"),
+            title: currDayInfo.book.get("title"),
+            description: currDayInfo.book.get("description"),
+            avatar: currDayInfo.book.get("avatar"),
+            author: currDayInfo.book.get("author"),
           });
           break;
         default:
-          setCurrInfo({
+          setCurrShown({
             current: "book",
-            title: moodInfo.book.get("title"),
-            description: moodInfo.book.get("description"),
-            avatar: moodInfo.book.get("avatar"),
-            author: moodInfo.book.get("author"),
+            title: currDayInfo.book.get("title"),
+            description: currDayInfo.book.get("description"),
+            avatar: currDayInfo.book.get("avatar"),
+            author: currDayInfo.book.get("author"),
           });
       }
     } else if (e.target.id === "arrow-back") {
-      switch (currInfo.current) {
+      switch (currShown.current) {
         case "book":
-          setCurrInfo({
+          setCurrShown({
             current: "playlist",
-            title: moodInfo.playlist.get("title"),
-            description: moodInfo.playlist.get("link"),
-            avatar: moodInfo.playlist.get("avatar"),
+            title: currDayInfo.playlist.get("title"),
+            description: currDayInfo.playlist.get("link"),
+            avatar: currDayInfo.playlist.get("avatar"),
           });
           break;
         case "playlist":
-          setCurrInfo({
+          setCurrShown({
             current: "movie",
-            title: moodInfo.movie.get("title"),
-            description: moodInfo.movie.get("description"),
-            avatar: moodInfo.movie.get("avatar"),
+            title: currDayInfo.movie.get("title"),
+            description: currDayInfo.movie.get("description"),
+            avatar: currDayInfo.movie.get("avatar"),
           });
           break;
         case "movie":
-          setCurrInfo({
+          setCurrShown({
             current: "book",
-            title: moodInfo.book.get("title"),
-            description: moodInfo.book.get("description"),
-            avatar: moodInfo.book.get("avatar"),
-            author: moodInfo.book.get("author"),
+            title: currDayInfo.book.get("title"),
+            description: currDayInfo.book.get("description"),
+            avatar: currDayInfo.book.get("avatar"),
+            author: currDayInfo.book.get("author"),
           });
           break;
         default:
-          setCurrInfo({
+          setCurrShown({
             current: "book",
-            title: moodInfo.book.get("title"),
-            description: moodInfo.book.get("description"),
-            avatar: moodInfo.book.get("avatar"),
-            author: moodInfo.book.get("author"),
+            title: currDayInfo.book.get("title"),
+            description: currDayInfo.book.get("description"),
+            avatar: currDayInfo.book.get("avatar"),
+            author: currDayInfo.book.get("author"),
           });
       }
     }
@@ -221,20 +238,24 @@ const MoodPage = (props) => {
               onClick={changeCurrShownHandler}
             ></Arrow>
             <div className="outer-mood-page-carousel">
-              <img src={currInfo.avatar} alt={currInfo.title} />
+              <img src={currShown.avatar} alt={currShown.title} />
               <div>
                 <h3>
-                  {currInfo.author
-                    ? `${currInfo.title} by ${currInfo.author}`
-                    : currInfo.title}
+                  {currShown.author
+                    ? `${currShown.title} by ${currShown.author}`
+                    : currShown.title}
                 </h3>
                 <p>
-                  {currInfo.current === "playlist" ? (
-                    <a href={currInfo.description} target="_blank">
+                  {currShown.current === "playlist" ? (
+                    <a
+                      href={currShown.description}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
                       Go to Spotify &#62;
                     </a>
                   ) : (
-                    currInfo.description
+                    currShown.description
                   )}
                 </p>
               </div>
