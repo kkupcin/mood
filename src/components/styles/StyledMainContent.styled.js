@@ -8,6 +8,14 @@ export const StyledMainContent = styled.ul`
   justify-content: baseline;
   font-size: 18px;
   font-weight: 700;
+
+  @media screen and (max-width: 900px) {
+    font-size: 16px;
+  }
+
+  @media screen and (max-width: 700px) {
+    padding: 0 24px;
+  }
 `;
 
 export const StyledLink = styled(Link)`
@@ -48,6 +56,14 @@ export const StyledLink = styled(Link)`
         (mood === "happy" && "#9067C6") ||
         (mood === "lonely" && "#C59B76")};
   }
+
+  @media screen and (max-width: 900px) {
+    padding: 14px 28px;
+  }
+
+  @media screen and (max-width: 700px) {
+    
+  }
 `;
 
 export const StyledPara = styled.p`
@@ -56,4 +72,18 @@ export const StyledPara = styled.p`
   width: 80%;
   margin: 32px 0;
   line-height: 1.5;
+
+  @media screen and (max-width: 900px) {
+    width: 90%;
+  }
+
+  @media screen and (max-width: 700px) {
+    width: 90%;
+    font-size: 22px;
+  }
+
+  @media screen and (max-width: 550px) {
+    width: 100%;
+    font-size: 20px;
+  }
 `;
