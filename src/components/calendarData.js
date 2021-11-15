@@ -1,7 +1,9 @@
+// Fin number of days in currently displayed month
 function daysInMonth(month, year) {
   return new Date(year, month, 0).getDate();
 }
 
+// Set default calendar data
 const setCalendarData = (currentDate) => {
   let calendarData = [];
   let daysInMon = daysInMonth(
