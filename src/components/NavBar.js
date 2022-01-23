@@ -9,6 +9,7 @@ import { useLocation } from "react-router-dom";
 
 const NavBar = (props) => {
   const [showHamburgerMenu, setShowHamburgerMenu] = useState(false);
+
   // If user logs out, pass that to App.js
   const logOutHandler = async () => {
     await Parse.User.logOut();
@@ -25,11 +26,7 @@ const NavBar = (props) => {
 
   // Hamburger menu button click listener to show or hide child nodes (menu)
   const displayHamburgerMenu = () => {
-    if (showHamburgerMenu) {
-      setShowHamburgerMenu(false);
-    } else {
-      setShowHamburgerMenu(true);
-    }
+    setShowHamburgerMenu(!showHamburgerMenu);
   };
 
   return (
@@ -42,8 +39,8 @@ const NavBar = (props) => {
       >
         <i className="fas fa-bars" onClick={displayHamburgerMenu}></i>
         <div>
-          {props.isLoggedIn && (
-            <React.Fragment>
+          {props.isLoggedIn ? (
+            <div>
               <NavBarLink to="/calendar" activeClassName="active">
                 Mood Calendar
               </NavBarLink>
@@ -54,19 +51,16 @@ const NavBar = (props) => {
               >
                 Log Out
               </NavBarLink>
-            </React.Fragment>
-          )}
-          {!props.isLoggedIn && (
-            <React.Fragment>
-              <div>
-                <NavBarLink to="/login" activeClassName="active">
-                  Login
-                </NavBarLink>
-                <NavBarLink to="/signup" activeClassName="active">
-                  Sign Up
-                </NavBarLink>
-              </div>
-            </React.Fragment>
+            </div>
+          ) : (
+            <div>
+              <NavBarLink to="/login" activeClassName="active">
+                Login
+              </NavBarLink>
+              <NavBarLink to="/signup" activeClassName="active">
+                Sign Up
+              </NavBarLink>
+            </div>
           )}
         </div>
       </div>

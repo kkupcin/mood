@@ -11,7 +11,6 @@ export const Container = styled.div`
   box-sizing: border-box;
   flex: 1;
 
-
   h1 {
     font-weight: 500;
     font-size: 36px;

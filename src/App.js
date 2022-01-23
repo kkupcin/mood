@@ -20,6 +20,25 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
+    if (!Parse.User.current()) {
+      async function loginDemoAcc() {
+        let response = await fetch("https://randomuser.me/api/?inc=login");
+        let user = await response.json();
+        let token = Parse.Cloud.run("loginAsDemo", {
+          username: user.results[0].login.username,
+          password: user.results[0].login.password,
+        });
+        token = await token;
+
+        await Parse.User.become(token);
+        setIsLoggedIn(true);
+      }
+      try {
+        loginDemoAcc();
+      } catch (err) {
+        alert(err);
+      }
+    }
     // Check if there is a user already logged in
     if (Parse.User.current()) {
       setIsLoggedIn(true);

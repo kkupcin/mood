@@ -2,8 +2,8 @@ import styled from "styled-components";
 import { Link, NavLink } from "react-router-dom";
 
 export const StyledNavBar = styled.div`
-  width: 80%;
-  padding: 32px 0;
+  width: 90%;
+  padding: 24px 0 0 18px;
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
@@ -26,16 +26,18 @@ export const StyledNavBar = styled.div`
       align-items: flex-end;
       i {
         display: block;
+        padding: 16px;
+        cursor: pointer;
       }
 
       div {
         flex-direction: column;
         align-items: flex-end;
+        gap: 6px;
         position: absolute;
-        right: 0;
-        top: 100%;
+        right: 8px;
+        top: 120%;
         width: 180px;
-        height: 50px;
         pointer-events: none;
         opacity: 0;
         transition: all 0.2s ease-in-out;
@@ -43,18 +45,10 @@ export const StyledNavBar = styled.div`
 
       &.active-hamburger {
         div {
-          top: 200%;
+          top: 100%;
           opacity: 1;
           pointer-events: auto;
         }
-      }
-    }
-  }
-
-  @media screen and (max-width: 450px) {
-    .hamburger {
-      div {
-        height: 45px;
       }
     }
   }

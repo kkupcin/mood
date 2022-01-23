@@ -1,90 +1,131 @@
 import styled from "styled-components";
 
 export const InnerModal = styled.div`
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
+  position: fixed;
   z-index: 3;
-  height: auto;
-  max-width: 60%;
-  background-color: white;
+  top: 0;
+  bottom: 0;
+  width: 100vw;
+  background-color: #fff;
+  box-sizing: border-box;
   display: flex;
+  gap: 16px;
   flex-direction: column;
-  justify-content: space-evenly;
-  border-radius: 15px;
-  padding: 60px;
-  align-items: flex-start;
+  align-items: center;
+  padding: 64px 24px;
+  overflow: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 
   h1 {
-    font-size: 28px;
-    padding: 0;
-    height: 20%;
+    font-size: 24px;
   }
 
-  @media screen and (max-width: 1200px) {
-    min-width: 70%;
-    padding: 50px;
+  @media screen and (min-width: 500px) {
+    border-radius: 8px;
+    bottom: 10%;
+    top: 10%;
+    left: 10%;
+    right: 10%;
+    width: auto;
   }
 
-  @media screen and (max-width: 900px) {
-    
+  @media screen and (min-width: 700px) {
+    top: 15%;
+    left: 15%;
+    right: 15%;
+    bottom: 15%;
+  }
+
+  @media screen and (min-width: 1000px) {
+    bottom: auto;
+    right: auto;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    padding: 64px;
+    overflow: visible;
   }
 `;
 
 export const ModalBox = styled.div`
-  box-sizing: border-box;
-  padding: 0 64px;
-  display: flex;
   width: 100%;
-  justify-content: space-evenly;
-  align-items: flex-start;
-  border-bottom: 0.5px solid #ccc;
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid #eee;
+  position: relative;
 
   div {
-    display: inline-block;
-    padding: 42px;
-    width: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: space-evenly;
+    gap: 16px;
+    width: 80%;
+    margin: 24px auto;
 
     h3 {
-      font-size: 24px;
-      margin: 12px 0;
+      font-size: 18px;
+      font-weight: 700;
     }
 
-      img {
-        width: 100%;
-        object-fit: cover;
-      }
+    img {
+      width: 100%;
+      border-radius: 6px;
+    }
 
-      p {
-        margin: 16px 0;
-        font-size: 18px;
-      }
+    p {
+      font-size: 18px;
+    }
   }
 
-  @media screen and (max-width: 1200px) {
-    padding: 0;
+  @media screen and (min-width: 500px) {
+    div {
+      h3 {
+        font-size: 24px;
+      }
+    }
   }
 
-  @media screen and (max-width: 900px) {
-      
+  @media screen and (min-width: 700px) {
+    gap: 16px;
+  }
+
+  @media screen and (min-width: 1000px) {
+    flex-direction: row;
+    gap: 24px;
   }
 `;
 
 export const ModalExit = styled.div`
-  color: white;
-  font-size: 30px;
-  position: absolute;
-  top: -50px;
-  right: 0;
-  opacity: 1;
-  transition: all 0.1s ease-in-out;
+  position: fixed;
+  right: 5%;
+  top: 2%;
+  font-size: 24px;
+  background-color: #f9f9f9;
+  border-radius: 50%;
+  padding: 4px 10px;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+  z-index: 4;
 
   &:hover {
-    cursor: pointer;
-    opacity: 0.8;
+    background-color: #eee;
+  }
+
+  @media screen and (min-width: 500px) {
+    top: 5%;
+  }
+
+  @media screen and (min-width: 700px) {
+    top: 10%;
+    right: 15%;
+  }
+
+  @media screen and (min-width: 1000px) {
+    top: -10%;
+    right: 0;
   }
 `;

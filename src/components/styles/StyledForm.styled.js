@@ -18,7 +18,7 @@ export const StyledForm = styled.form`
     background-color: transparent;
     font-family: inherit;
     color: inherit;
-    border-bottom: 1px solid #5A4C4C;
+    border-bottom: 1px solid #5a4c4c;
     padding: 14px;
     padding-left: 0;
     outline: none;
@@ -28,7 +28,7 @@ export const StyledForm = styled.form`
 
   button {
     border: none;
-    background-color: #5A4C4C;
+    background-color: #5a4c4c;
     color: white;
     font-family: inherit;
     font-size: 20px;
@@ -45,7 +45,16 @@ export const StyledForm = styled.form`
   }
 
   button:disabled {
-    background-color: #A7A7A9;
+    background-color: #a7a7a9;
     cursor: default;
+  }
+
+  @media screen and (max-width: 1000px) {
+    width: 80%;
+  }
+
+  @media screen and (max-width: 500px) {
+    width: 100%;
+    margin: 0 auto;
   }
 `;

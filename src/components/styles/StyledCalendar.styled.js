@@ -14,7 +14,7 @@ export const StyledCalendarContainer = styled.div`
   }
 
   @media screen and (max-width: 450px) {
-    padding: 0 24px;
+    padding: 24px;
   }
 
   @media screen and (max-width: 320px) {
@@ -32,7 +32,7 @@ export const StyledCalendar = styled.div`
   h1 {
     font-weight: 500;
     font-size: 36px;
-    margin-bottom: 48px;
+    margin-bottom: 32px;
   }
 
   h3 {
@@ -68,16 +68,20 @@ export const StyledCalendar = styled.div`
 export const CalendarList = styled.ul`
   display: grid;
   grid-template-columns: repeat(7, 1fr);
+  gap: 16px;
 
-  @media screen and (max-width: 460px) {
-    grid-template-columns: repeat(4, 1fr);
+  @media screen and (min-width: 700px) {
+    gap: 24px;
+  }
+
+  @media screen and (min-width: 1000px) {
+    gap: 32px;
   }
 `;
 
 export const CalendarItem = styled.li`
   height: 30px;
   width: 30px;
-  margin: 16px;
   border-radius: 50%;
   position: relative;
   background-color: ${({ mood }) =>
@@ -115,7 +119,6 @@ export const CalendarItem = styled.li`
   @media screen and (max-width: 700px) {
     width: 28px;
     height: 28px;
-    margin: 12px;
 
     span {
       opacity: 1;
@@ -125,23 +128,23 @@ export const CalendarItem = styled.li`
   }
 
   @media screen and (max-width: 450px) {
-    margin: 10px;
-
     span {
       font-size: 14px;
     }
   }
 `;
 
-export const ColorGuide = styled.div`
+export const ColorGuide = styled.ul`
   display: grid;
   grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
   padding: 48px 0;
 
   li {
     display: flex;
     align-items: center;
     font-size: 18px;
+    gap: 8px;
   }
 
   @media screen and (max-width: 700px) {
@@ -155,10 +158,7 @@ export const ColorGuide = styled.div`
 
   @media screen and (max-width: 450px) {
     grid-template-columns: repeat(2, 1fr);
-  }
-
-  @media screen and (max-width: 320px) {
-    grid-template-columns: repeat(1, 1fr);
+    padding: 36px 0;
   }
 `;
 

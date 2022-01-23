@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Container } from "../components/styles/Container.styled";
 import {
   StyledLink,
@@ -6,8 +7,10 @@ import {
 } from "../components/styles/StyledMainContent.styled";
 
 const MainPage = (props) => {
-  const body = document.querySelector("body");
-  body.className = "img1"
+  useEffect(() => {
+    const body = document.querySelector("body");
+    body.className = "img1";
+  }, []);
 
   const newDate = new Date();
 

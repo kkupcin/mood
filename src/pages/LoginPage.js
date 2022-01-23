@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Parse from "parse";
-import { Redirect } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { Container } from "../components/styles/Container.styled";
 import { StyledForm } from "../components/styles/StyledForm.styled";
 
@@ -9,12 +9,22 @@ const LoginPage = (props) => {
     username: "",
     password: "",
   });
-  const [loginSuccessful, setLoginSuccessful] = useState(false);
-  const [isUsernameEmpty, setIsUsernameEmpty] = useState(true);
-  const [isPasswordEmpty, setIsPasswordEmpty] = useState(true);
+  const [isEveryFieldEmpty, setIsEveryFieldEmpty] = useState(true);
 
-  // TODO
-  // add login error and try again button
+  let history = useHistory();
+
+  useEffect(() => {
+    if (loginInfo.username !== "" && loginInfo.password !== "") {
+      setIsEveryFieldEmpty(false);
+    } else {
+      setIsEveryFieldEmpty(true);
+    }
+  }, [loginInfo]);
+
+  useEffect(() => {
+    const body = document.querySelector("body");
+    body.className = "img4";
+  }, []);
 
   const usernameInputHandler = (e) => {
     setLoginInfo((prevState) => {
@@ -22,11 +32,6 @@ const LoginPage = (props) => {
       infoCopy.username = e.target.value;
       return infoCopy;
     });
-    if (e.target.value.trim().length > 0) {
-      setIsUsernameEmpty(false);
-    } else {
-      setIsUsernameEmpty(true);
-    }
   };
 
   const passwordInputHandler = (e) => {
@@ -35,23 +40,7 @@ const LoginPage = (props) => {
       infoCopy.password = e.target.value;
       return infoCopy;
     });
-    if (e.target.value.trim().length > 0) {
-      setIsPasswordEmpty(false);
-    } else {
-      setIsPasswordEmpty(true);
-    }
   };
-
-  const formValidationCheck = () => {
-    if (isUsernameEmpty === false && isPasswordEmpty === false) {
-      return false;
-    } else {
-      return true;
-    }
-  };
-
-  const body = document.querySelector("body");
-  body.className = "img4";
 
   const loginFormSubmitHandler = async (e) => {
     e.preventDefault();
@@ -60,24 +49,22 @@ const LoginPage = (props) => {
     const passwordValue = loginInfo.password;
 
     try {
-      await Parse.User.logIn(usernameValue, passwordValue);
-      setLoginSuccessful(true);
+      let token = await Parse.Cloud.run("login", {
+        username: usernameValue,
+        password: passwordValue,
+      });
+      await Parse.User.become(token);
+
       props.loginHandler(true);
+
+      history.push("/");
     } catch (err) {
       alert(err);
-      setLoginSuccessful(false);
-      props.loginHandler(false);
     }
-
-    setLoginInfo({
-      username: "",
-      password: "",
-    });
   };
 
   return (
     <Container left="15%" align="left">
-      {loginSuccessful && <Redirect to="/" />}
       <h1>Log In</h1>
       <StyledForm>
         <div>
@@ -96,10 +83,7 @@ const LoginPage = (props) => {
             value={loginInfo.password}
           ></input>
         </div>
-        <button
-          disabled={formValidationCheck()}
-          onClick={loginFormSubmitHandler}
-        >
+        <button disabled={isEveryFieldEmpty} onClick={loginFormSubmitHandler}>
           Log me in
         </button>
       </StyledForm>

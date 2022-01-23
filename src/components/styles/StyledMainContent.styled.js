@@ -8,6 +8,7 @@ export const StyledMainContent = styled.ul`
   justify-content: baseline;
   font-size: 18px;
   font-weight: 700;
+  gap: 16px;
 
   @media screen and (max-width: 900px) {
     font-size: 16px;
@@ -22,7 +23,6 @@ export const StyledLink = styled(Link)`
   border: 2px solid black;
   padding: 16px 32px;
   border-radius: 50px;
-  margin: 18px 32px 18px 0;
   transition: all 0.2s ease-in-out;
   text-decoration: none;
   color: ${({ mood }) =>
@@ -34,7 +34,7 @@ export const StyledLink = styled(Link)`
     (mood === "happy" && "#9067C6") ||
     (mood === "lonely" && "#C59B76")};
 
-    border-color: ${({ mood }) =>
+  border-color: ${({ mood }) =>
     (mood === "sad" && "#C0C781") ||
     (mood === "adventurous" && "#841C26") ||
     (mood === "excited" && "#E9806E") ||
@@ -43,18 +43,18 @@ export const StyledLink = styled(Link)`
     (mood === "happy" && "#9067C6") ||
     (mood === "lonely" && "#C59B76")};
 
-    &:hover {
-        color: white;
-        cursor: pointer;
-    
-        background-color: ${({ mood }) =>
-        (mood === "sad" && "#C0C781") ||
-        (mood === "adventurous" && "#841C26") ||
-        (mood === "excited" && "#E9806E") ||
-        (mood === "afraid" && "#477890") ||
-        (mood === "nostalgic" && "#5B6C5D") ||
-        (mood === "happy" && "#9067C6") ||
-        (mood === "lonely" && "#C59B76")};
+  &:hover {
+    color: white;
+    cursor: pointer;
+
+    background-color: ${({ mood }) =>
+      (mood === "sad" && "#C0C781") ||
+      (mood === "adventurous" && "#841C26") ||
+      (mood === "excited" && "#E9806E") ||
+      (mood === "afraid" && "#477890") ||
+      (mood === "nostalgic" && "#5B6C5D") ||
+      (mood === "happy" && "#9067C6") ||
+      (mood === "lonely" && "#C59B76")};
   }
 
   @media screen and (max-width: 900px) {

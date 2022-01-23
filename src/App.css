@@ -1,6 +1,7 @@
 .App {
-  color: #5A4C4C;
+  color: #4c5760;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  position: relative;
 }

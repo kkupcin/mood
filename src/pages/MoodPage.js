@@ -8,123 +8,37 @@ import { Arrow } from "../components/styles/StyledCalendar.styled";
 import { StyledMoodContent } from "../components/styles/StyledMoodContent.styled";
 
 const MoodPage = (props) => {
-  // Add background image class for styling
-  const body = document.querySelector("body");
-  body.className = "img5";
-
   const [isLoading, setIsLoading] = useState(true);
   const [currDayInfo, setCurrDayInfo] = useState({});
   const [currShown, setCurrShown] = useState({});
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   // Takes mood and date from the URL
   const { mood, date } = useParams();
 
   useEffect(() => {
     if (props.isLoggedIn) {
-      setIsLoggedIn(true);
       setDayInfo(mood, date);
     } else {
-      setIsLoggedIn(false);
       setIsLoading(false);
     }
   }, [props.isLoggedIn]);
 
-  // Assigns random book from Parse based on mood
-  const setRandomBook = async (mood) => {
-    const query = new Parse.Query("Book");
-    query.equalTo("mood", mood);
-    const results = await query.find();
-
-    const randomIndex = Math.floor(Math.random() * (results.length - 1));
-    return results[randomIndex];
-  };
-
-  // Assigns random playlist from Parse based on mood
-  const setRandomPlaylist = async (mood) => {
-    const query = new Parse.Query("Playlist");
-    query.equalTo("mood", mood);
-    const results = await query.find();
-
-    const randomIndex = Math.floor(Math.random() * (results.length - 1));
-    return results[randomIndex];
-  };
-
-  // Assigns random movie from Parse based on mood
-  const setRandomMovie = async (mood) => {
-    const query = new Parse.Query("Movie");
-    query.equalTo("mood", mood);
-    const results = await query.find();
-
-    const randomIndex = Math.floor(Math.random() * (results.length - 1));
-    return results[randomIndex];
-  };
+  useEffect(() => {
+    const body = document.querySelector("body");
+    body.className = "img5";
+  }, []);
 
   // Either creates a new "Day" entry or adjusts the currently existing entry from same day
   const setDayInfo = async (mood, date) => {
     try {
       setIsLoading(true);
-      const providedDate = new Date(date);
-      const Day = new Parse.Object("Day");
 
-      // Assigns random data from Parse
-      const book = await setRandomBook(mood);
-      const movie = await setRandomMovie(mood);
-      const playlist = await setRandomPlaylist(mood);
-
-      // Looks if Parse object for for same day already exists
-      const dayQuery = new Parse.Query("Day");
-      dayQuery.equalTo("user", Parse.User.current());
-      let results = await dayQuery.find();
-
-      // Gets date for search
-      let day = providedDate.getDate();
-      let month = providedDate.getMonth();
-      let year = providedDate.getFullYear();
-
-      // Checks if dates match with any found entries
-      if (results.length > 0) {
-        const foundResult = results.find((result) => {
-          let resultDay = result.get("date").getDate();
-          let resultMonth = result.get("date").getMonth();
-          let resultYear = result.get("date").getFullYear();
-          if (
-            day === resultDay &&
-            month === resultMonth &&
-            year === resultYear
-          ) {
-            return result;
-          }
-        });
-
-        // If entry exists, changes found values to newly generated values
-        if (foundResult) {
-          foundResult.set("date", providedDate);
-          foundResult.set("user", Parse.User.current());
-          foundResult.set("mood", mood);
-          foundResult.set("book", book);
-          foundResult.set("movie", movie);
-          foundResult.set("playlist", playlist);
-
-          await foundResult.save();
-        } else {
-          // If entry does not exist, creates a new entry for given date
-          Day.set("date", providedDate);
-          Day.set("user", Parse.User.current());
-          Day.set("mood", mood);
-          Day.set("book", book);
-          Day.set("movie", movie);
-          Day.set("playlist", playlist);
-
-          await Day.save();
-        }
-      }
+      const { book, movie, playlist } = await Parse.Cloud.run("getDayInfo", {
+        date: date,
+        mood: mood,
+      });
 
       // Sets info for later getting details to display
-      setCurrDayInfo({
-        book: book,
-        movie: movie,
-        playlist: playlist,
-      });
+      setCurrDayInfo({ book, movie, playlist });
 
       // Sets first currently shown info
       setCurrShown({
@@ -220,15 +134,11 @@ const MoodPage = (props) => {
   };
 
   return (
-    <React.Fragment>
-      {isLoading && (
-        <Container>
-          <LoadingSpinner className="mood-page" />
-        </Container>
-      )}
-      {!isLoading && !isLoggedIn && <NotLoggedInPage />}
-      {!isLoading && isLoggedIn && (
-        <Container left="68px" className="mood-page">
+    <Container left="68px" className="mood-page">
+      {isLoading && <LoadingSpinner className="mood-page" />}
+      {!isLoading && !props.isLoggedIn && <NotLoggedInPage />}
+      {!isLoading && props.isLoggedIn && (
+        <React.Fragment>
           <h1>{`You are feeling ${mood}`}</h1>
           <StyledMoodContent>
             <Arrow
@@ -267,9 +177,9 @@ const MoodPage = (props) => {
               onClick={changeCurrShownHandler}
             ></Arrow>
           </StyledMoodContent>
-        </Container>
+        </React.Fragment>
       )}
-    </React.Fragment>
+    </Container>
   );
 };
 

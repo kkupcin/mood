@@ -1,4 +1,4 @@
-import { setCalendarData } from "./calendarData";
+import { getCalendarTemplate } from "../utils/calendarUtils";
 import CalendarModal from "./CalendarModal";
 import React, { useEffect, useState } from "react";
 import Parse from "parse";
@@ -11,11 +11,9 @@ import {
   Arrow,
 } from "./styles/StyledCalendar.styled";
 
-let clickedNumber = "";
-
 const Calendar = (props) => {
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [daysInfo, setDaysInfo] = useState(setCalendarData(currentDate));
+  const [daysInfo, setDaysInfo] = useState(getCalendarTemplate(currentDate));
   const [fetchedDays, setFetchedDays] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [clickedDayInfo, setClickedDayInfo] = useState([]);
@@ -24,12 +22,9 @@ const Calendar = (props) => {
     lastDate: currentDate,
   });
 
-  const fetchData = async () => {
-    const query = new Parse.Query("Day");
-    query.equalTo("user", Parse.User.current());
-
+  const fetchDays = async () => {
     try {
-      let newFetchedDays = await query.find();
+      let newFetchedDays = await Parse.Cloud.run("fetchDays");
       setFetchedDays(newFetchedDays);
     } catch (err) {
       alert(err);
@@ -37,13 +32,12 @@ const Calendar = (props) => {
   };
 
   const getDate = () => {
-    let placeholderData = setCalendarData(currentDate);
+    let placeholderData = getCalendarTemplate(currentDate);
 
     let checkFirstMonth =
       (fetchedDays[0] && fetchedDays[0].get("date")) || new Date();
     let checkLastMonth = new Date();
 
-    let placeholderDataCopy = [...placeholderData];
     fetchedDays.forEach((day) => {
       let currIndex = day.get("date").getDate() - 1;
 
@@ -60,12 +54,11 @@ const Calendar = (props) => {
           getLocaleStringMonth(currentDate) &&
         day.get("date").getFullYear() === currentDate.getFullYear()
       ) {
-        placeholderDataCopy[0].days[currIndex].mood = day.get("mood");
-        placeholderDataCopy[0].days[currIndex].playlist =
-          day.get("playlist").id;
-        placeholderDataCopy[0].days[currIndex].movie = day.get("movie").id;
-        placeholderDataCopy[0].days[currIndex].book = day.get("book").id;
-        placeholderDataCopy[0].days[currIndex].date = day.get("date");
+        placeholderData[0].days[currIndex].mood = day.get("mood");
+        placeholderData[0].days[currIndex].playlist = day.get("playlist").id;
+        placeholderData[0].days[currIndex].movie = day.get("movie").id;
+        placeholderData[0].days[currIndex].book = day.get("book").id;
+        placeholderData[0].days[currIndex].date = day.get("date");
       }
     });
 
@@ -74,7 +67,7 @@ const Calendar = (props) => {
       lastDate: checkLastMonth,
     });
 
-    setDaysInfo(placeholderDataCopy);
+    setDaysInfo(placeholderData);
   };
 
   const getLocaleStringMonth = (date) => {
@@ -82,7 +75,7 @@ const Calendar = (props) => {
   };
 
   useEffect(() => {
-    fetchData();
+    fetchDays();
   }, []);
 
   useEffect(() => {
@@ -90,11 +83,9 @@ const Calendar = (props) => {
   }, [fetchedDays, currentDate]);
 
   const openDayInfoHandler = (e) => {
-    const clickedDay = daysInfo[0].days.filter(
+    const clickedDay = daysInfo[0].days.find(
       (day, index) => index + 1 === parseInt(e.target.innerText)
     );
-
-    clickedNumber = e.target.innerText;
 
     setClickedDayInfo(clickedDay);
 
@@ -119,6 +110,7 @@ const Calendar = (props) => {
     <React.Fragment>
       {showModal && (
         <CalendarModal
+          showModal={showModal}
           closeModal={closeModalHandler}
           data={clickedDayInfo}
           year={currentDate.getFullYear()}
@@ -126,8 +118,8 @@ const Calendar = (props) => {
             month: "long",
           })}
           monthIndex={currentDate.getMonth() + 1}
-          day={clickedNumber}
-          mood={clickedDayInfo[0].mood}
+          day={daysInfo[0].days.indexOf(clickedDayInfo) + 1}
+          mood={clickedDayInfo.mood}
         />
       )}
       <StyledCalendarContainer>

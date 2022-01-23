@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Parse from "parse";
-import { Redirect } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { Container } from "../components/styles/Container.styled";
 import { StyledForm } from "../components/styles/StyledForm.styled";
 
@@ -9,12 +9,31 @@ const SignupPage = (props) => {
     username: "",
     email: "",
     password: "",
+    confirmPassword: "",
   });
   const [passwordIsValid, setPasswordIsValid] = useState(false);
-  const [signupSuccessful, setSignupSuccessful] = useState(false);
-  const [isUsernameEmpty, setIsUsernameEmpty] = useState(true);
-  const [isPasswordEmpty, setIsPasswordEmpty] = useState(true);
-  const [isEmailEmpty, setIsEmailEmpty] = useState(true);
+  const [isEveryFieldEmpty, setIsEveryFieldEmpty] = useState(true);
+
+  let history = useHistory();
+
+  // Check if every field is empty
+  useEffect(() => {
+    if (
+      signupInfo.username !== "" &&
+      signupInfo.email !== "" &&
+      signupInfo.password !== "" &&
+      signupInfo.confirmPassword !== ""
+    ) {
+      setIsEveryFieldEmpty(false);
+    } else {
+      setIsEveryFieldEmpty(true);
+    }
+  }, [signupInfo]);
+
+  useEffect(() => {
+    const body = document.querySelector("body");
+    body.className = "img3";
+  }, []);
 
   const usernameInputHandler = (e) => {
     setSignupInfo((prevState) => {
@@ -22,11 +41,6 @@ const SignupPage = (props) => {
       infoCopy.username = e.target.value;
       return infoCopy;
     });
-    if (e.target.value.trim().length > 0) {
-      setIsUsernameEmpty(false);
-    } else {
-      setIsUsernameEmpty(true);
-    }
   };
 
   const emailInputHandler = (e) => {
@@ -35,11 +49,6 @@ const SignupPage = (props) => {
       infoCopy.email = e.target.value;
       return infoCopy;
     });
-    if (e.target.value.trim().length > 0) {
-      setIsEmailEmpty(false);
-    } else {
-      setIsEmailEmpty(true);
-    }
   };
 
   const passwordInputHandler = (e) => {
@@ -48,14 +57,15 @@ const SignupPage = (props) => {
       infoCopy.password = e.target.value;
       return infoCopy;
     });
-    if (e.target.value.trim().length > 0) {
-      setIsPasswordEmpty(false);
-    } else {
-      setIsPasswordEmpty(true);
-    }
   };
 
   const passwordCheckHandler = (e) => {
+    setSignupInfo((prevState) => {
+      let infoCopy = { ...prevState };
+      infoCopy.confirmPassword = e.target.value;
+      return infoCopy;
+    });
+
     if (signupInfo.password === e.target.value) {
       setPasswordIsValid(true);
     } else {
@@ -63,35 +73,8 @@ const SignupPage = (props) => {
     }
   };
 
-  const formValidationCheck = () => {
-    if (
-      isUsernameEmpty === false &&
-      isPasswordEmpty === false &&
-      isEmailEmpty === false &&
-      passwordIsValid === true
-    ) {
-      return false;
-    } else {
-      return true;
-    }
-  };
-
-  const body = document.querySelector("body");
-  body.className = "img3";
-
   const signupFormSubmitHandler = async (e) => {
     e.preventDefault();
-    if (passwordIsValid === false) {
-      console.log("Password does not match");
-      setSignupInfo({
-        username: "",
-        email: "",
-        password: "",
-      });
-      const passwordCheckInput = document.querySelector("#password-check");
-      passwordCheckInput.value = "";
-      return;
-    }
 
     const usernameValue = signupInfo.username;
     const emailValue = signupInfo.email;
@@ -99,20 +82,19 @@ const SignupPage = (props) => {
 
     try {
       const newUser = await Parse.User.signUp(usernameValue, passwordValue);
+
       newUser.setEmail(emailValue);
       newUser.save();
-      setSignupSuccessful(true);
+
       props.loginHandler(true);
+      history.push("/");
     } catch (err) {
       alert(err);
-      setSignupSuccessful(false);
-      props.loginHandler(false);
     }
   };
 
   return (
     <Container left="15%" align="left">
-      {signupSuccessful && <Redirect to="/" />}
       <div>
         <h1>Sign up to track your mood</h1>
         <StyledForm>
@@ -137,7 +119,7 @@ const SignupPage = (props) => {
             ></input>
           </div>
           <button
-            disabled={formValidationCheck()}
+            disabled={isEveryFieldEmpty || !passwordIsValid}
             onClick={signupFormSubmitHandler}
           >
             Sign me up

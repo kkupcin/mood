@@ -192,13 +192,13 @@ body {
     bottom: 0;
     right: 0;
     background-color: #fff;
-    opacity: 0.5;
+    opacity: 0.8;
   }
 }
 
 @media screen and (max-width: 700px) {
   body::after {
-    opacity: 0.8;
+    opacity: 0.9;
   }
 
   .img2 {

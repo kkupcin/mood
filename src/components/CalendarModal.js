@@ -8,68 +8,68 @@ import { MoodChanger, StyledMoodLink } from "./styles/MoodChanger.styled";
 const CalendarModal = (props) => {
   const [dayInfo, setDayInfo] = useState({});
   const [isLoading, setIsLoading] = useState(true);
-  const [infoAvailable, setInfoAvailable] = useState(false);
+
+  // Fetches data to display in modal from Parse
+  const retrieveData = async () => {
+    setIsLoading(true);
+    try {
+      const fetchedBook = await Parse.Cloud.run("fetchBookByUserAndMood", {
+        book: props.data.book,
+        mood: props.mood,
+      });
+
+      const fetchedMovie = await Parse.Cloud.run("fetchMovieByUserAndMood", {
+        movie: props.data.movie,
+        mood: props.mood,
+      });
+
+      const fetchedPlaylist = await Parse.Cloud.run(
+        "fetchPlaylistByUserAndMood",
+        {
+          playlist: props.data.playlist,
+          mood: props.mood,
+        }
+      );
+
+      const bookTitle = fetchedBook.get("title");
+      const bookAuthor = fetchedBook.get("author");
+      const bookAvatar = fetchedBook.get("avatar");
+
+      const playlistTitle = fetchedPlaylist.get("title");
+      const playlistAvatar = fetchedPlaylist.get("avatar");
+
+      const movieTitle = fetchedMovie.get("title");
+      const movieAvatar = fetchedMovie.get("avatar");
+
+      // Sets data to display in modal
+      setDayInfo({
+        book: {
+          title: bookTitle,
+          author: bookAuthor,
+          avatar: bookAvatar,
+        },
+        playlist: {
+          title: playlistTitle,
+          avatar: playlistAvatar,
+        },
+        movie: {
+          title: movieTitle,
+          avatar: movieAvatar,
+        },
+      });
+      setIsLoading(false);
+    } catch (err) {
+      setIsLoading(false);
+      alert(err);
+    }
+  };
 
   useEffect(() => {
-    // Fetches data to display in modal from Parse
-    const retrieveData = async () => {
-      setIsLoading(true);
-      if (props.data[0].mood !== "") {
-        try {
-          const Book = new Parse.Query("Book");
-          Book.equalTo("objectId", props.data[0].book);
-          Book.equalTo("mood", props.mood);
-          const fetchedBook = await Book.find();
-
-          const Playlist = new Parse.Query("Playlist");
-          Playlist.equalTo("objectId", props.data[0].playlist);
-          Playlist.equalTo("mood", props.mood);
-          const fetchedPlaylist = await Playlist.find();
-
-          const Movie = new Parse.Query("Movie");
-          Movie.equalTo("objectId", props.data[0].movie);
-          Movie.equalTo("mood", props.mood);
-          const fetchedMovie = await Movie.find();
-
-          const bookTitle = fetchedBook[0].get("title");
-          const bookAuthor = fetchedBook[0].get("author");
-          const bookAvatar = fetchedBook[0].get("avatar");
-
-          const playlistTitle = fetchedPlaylist[0].get("title");
-          const playlistAvatar = fetchedPlaylist[0].get("avatar");
-
-          const movieTitle = fetchedMovie[0].get("title");
-          const movieAvatar = fetchedMovie[0].get("avatar");
-
-          // Sets data to display in modal
-          setDayInfo({
-            book: {
-              title: bookTitle,
-              author: bookAuthor,
-              avatar: bookAvatar,
-            },
-            playlist: {
-              title: playlistTitle,
-              avatar: playlistAvatar,
-            },
-            movie: {
-              title: movieTitle,
-              avatar: movieAvatar,
-            },
-          });
-          setInfoAvailable(true);
-          setIsLoading(false);
-        } catch (err) {
-          setInfoAvailable(false);
-          setIsLoading(false);
-          alert(err);
-        }
-      } else if (props.data[0].mood === "") {
-        setInfoAvailable(false);
-        setIsLoading(false);
-      }
-    };
-    retrieveData();
+    if (props.data.mood !== "") {
+      retrieveData();
+    } else {
+      setIsLoading(false);
+    }
   }, []);
 
   // Close modal if 'ESC' button is pressed
@@ -91,10 +91,10 @@ const CalendarModal = (props) => {
       {!isLoading && (
         <InnerModal>
           <ModalExit onClick={closeModalHandler}>x</ModalExit>
-          {infoAvailable && (
+          {props.data.mood && (
             <h1>{`${props.month} ${props.day} - ${props.mood}`}</h1>
           )}
-          {infoAvailable && (
+          {props.data.mood && (
             <ModalBox>
               <div>
                 <h3>Book</h3>
@@ -115,7 +115,7 @@ const CalendarModal = (props) => {
           )}
           <MoodChanger>
             <h3>
-              {infoAvailable
+              {props.data.mood
                 ? "Felt different?"
                 : "How did you feel on this day?"}
             </h3>
