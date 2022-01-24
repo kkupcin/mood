@@ -32,6 +32,7 @@ function App() {
         token = await token;
 
         await Parse.User.become(token);
+
         setIsLoggedIn(true);
         setDemoIsLoggedIn(true);
       }
