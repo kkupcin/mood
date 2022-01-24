@@ -84,6 +84,7 @@ export const CalendarItem = styled.li`
   width: 30px;
   border-radius: 50%;
   position: relative;
+  cursor: pointer;
   background-color: ${({ mood }) =>
     (mood === "sad" && "#C0C781") ||
     (mood === "adventurous" && "#841C26") ||
@@ -113,7 +114,6 @@ export const CalendarItem = styled.li`
     top: 24px;
     opacity: 0;
     transition: all 0.2s ease-in-out;
-    cursor: pointer;
   }
 
   @media screen and (max-width: 700px) {

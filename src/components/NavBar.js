@@ -19,7 +19,7 @@ const NavBar = (props) => {
   // Location taken from React-Router-DOM
   let location = useLocation();
 
-  // Using location to hide Hamburger menu when it changes
+  // Use location to hide Hamburger menu when it changes
   useEffect(() => {
     setShowHamburgerMenu(false);
   }, [location]);

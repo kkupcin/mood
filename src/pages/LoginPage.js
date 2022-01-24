@@ -13,6 +13,7 @@ const LoginPage = (props) => {
 
   let history = useHistory();
 
+  // Check if fields are empty on mount
   useEffect(() => {
     if (loginInfo.username !== "" && loginInfo.password !== "") {
       setIsEveryFieldEmpty(false);
@@ -21,27 +22,22 @@ const LoginPage = (props) => {
     }
   }, [loginInfo]);
 
+  // Set background image
   useEffect(() => {
     const body = document.querySelector("body");
     body.className = "img4";
   }, []);
 
+  // Handle inputs and set log in info state
   const usernameInputHandler = (e) => {
-    setLoginInfo((prevState) => {
-      let infoCopy = { ...prevState };
-      infoCopy.username = e.target.value;
-      return infoCopy;
-    });
+    setLoginInfo({ ...loginInfo, username: e.target.value });
   };
 
   const passwordInputHandler = (e) => {
-    setLoginInfo((prevState) => {
-      let infoCopy = { ...prevState };
-      infoCopy.password = e.target.value;
-      return infoCopy;
-    });
+    setLoginInfo({ ...loginInfo, password: e.target.value });
   };
 
+  // Log user in with provided details
   const loginFormSubmitHandler = async (e) => {
     e.preventDefault();
 

@@ -22,6 +22,7 @@ const Calendar = (props) => {
     lastDate: currentDate,
   });
 
+  // Fetch all day information for current user
   const fetchDays = async () => {
     try {
       let newFetchedDays = await Parse.Cloud.run("fetchDays");
@@ -31,6 +32,7 @@ const Calendar = (props) => {
     }
   };
 
+  // Set day information for display
   const getDate = () => {
     let placeholderData = getCalendarTemplate(currentDate);
 
@@ -62,6 +64,7 @@ const Calendar = (props) => {
       }
     });
 
+    // Check which months are filled for display
     setMonthsFilled({
       firstDate: checkFirstMonth,
       lastDate: checkLastMonth,
@@ -70,18 +73,22 @@ const Calendar = (props) => {
     setDaysInfo(placeholderData);
   };
 
+  // Get shown month name in long format
   const getLocaleStringMonth = (date) => {
     return date.toLocaleString("en-US", { month: "long" });
   };
 
+  // Fetch days info on mount
   useEffect(() => {
     fetchDays();
   }, []);
 
+  // Set date info again if the currently shown date or information changes
   useEffect(() => {
     getDate();
   }, [fetchedDays, currentDate]);
 
+  // Handle opening modal for a specific day
   const openDayInfoHandler = (e) => {
     const clickedDay = daysInfo[0].days.find(
       (day, index) => index + 1 === parseInt(e.target.innerText)
@@ -92,10 +99,12 @@ const Calendar = (props) => {
     setShowModal(true);
   };
 
+  // Click on "x" handler
   const closeModalHandler = () => {
     setShowModal(false);
   };
 
+  // Handle arrow click to change the month
   const changeMonthHandler = (e) => {
     let date = new Date(currentDate);
     if (e.target.id === "arrow-forward") {

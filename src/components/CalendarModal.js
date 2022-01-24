@@ -9,7 +9,7 @@ const CalendarModal = (props) => {
   const [dayInfo, setDayInfo] = useState({});
   const [isLoading, setIsLoading] = useState(true);
 
-  // Fetches data to display in modal from Parse
+  // Fetch data to display in modal from Parse
   const retrieveData = async () => {
     setIsLoading(true);
     try {
@@ -41,7 +41,7 @@ const CalendarModal = (props) => {
       const movieTitle = fetchedMovie.get("title");
       const movieAvatar = fetchedMovie.get("avatar");
 
-      // Sets data to display in modal
+      // Set data to display in modal
       setDayInfo({
         book: {
           title: bookTitle,
@@ -64,6 +64,7 @@ const CalendarModal = (props) => {
     }
   };
 
+  // Check if a mood has been passed on
   useEffect(() => {
     if (props.data.mood !== "") {
       retrieveData();

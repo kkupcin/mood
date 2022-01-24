@@ -30,41 +30,28 @@ const SignupPage = (props) => {
     }
   }, [signupInfo]);
 
+  // Set background image
   useEffect(() => {
     const body = document.querySelector("body");
     body.className = "img3";
   }, []);
 
+  // Handle input and set state for signing up
   const usernameInputHandler = (e) => {
-    setSignupInfo((prevState) => {
-      let infoCopy = { ...prevState };
-      infoCopy.username = e.target.value;
-      return infoCopy;
-    });
+    setSignupInfo({ ...signupInfo, username: e.target.value });
   };
 
   const emailInputHandler = (e) => {
-    setSignupInfo((prevState) => {
-      let infoCopy = { ...prevState };
-      infoCopy.email = e.target.value;
-      return infoCopy;
-    });
+    setSignupInfo({ ...signupInfo, email: e.target.value });
   };
 
   const passwordInputHandler = (e) => {
-    setSignupInfo((prevState) => {
-      let infoCopy = { ...prevState };
-      infoCopy.password = e.target.value;
-      return infoCopy;
-    });
+    setSignupInfo({ ...signupInfo, password: e.target.value });
   };
 
+  // Check if entered passwords match
   const passwordCheckHandler = (e) => {
-    setSignupInfo((prevState) => {
-      let infoCopy = { ...prevState };
-      infoCopy.confirmPassword = e.target.value;
-      return infoCopy;
-    });
+    setSignupInfo({ ...signupInfo, confirmPassword: e.target.value });
 
     if (signupInfo.password === e.target.value) {
       setPasswordIsValid(true);
@@ -73,6 +60,7 @@ const SignupPage = (props) => {
     }
   };
 
+  // Creates new user account
   const signupFormSubmitHandler = async (e) => {
     e.preventDefault();
 

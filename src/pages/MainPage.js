@@ -7,6 +7,7 @@ import {
 } from "../components/styles/StyledMainContent.styled";
 
 const MainPage = (props) => {
+  // Set background image
   useEffect(() => {
     const body = document.querySelector("body");
     body.className = "img1";
@@ -14,6 +15,7 @@ const MainPage = (props) => {
 
   const newDate = new Date();
 
+  // Get date for mood calendar
   const date = `${newDate.getFullYear()}-${
     newDate.getMonth() + 1
   }-${newDate.getDate()}`;

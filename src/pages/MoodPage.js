@@ -11,7 +11,7 @@ const MoodPage = (props) => {
   const [isLoading, setIsLoading] = useState(true);
   const [currDayInfo, setCurrDayInfo] = useState({});
   const [currShown, setCurrShown] = useState({});
-  // Takes mood and date from the URL
+  // Take mood and date from the URL
   const { mood, date } = useParams();
 
   useEffect(() => {
@@ -22,12 +22,13 @@ const MoodPage = (props) => {
     }
   }, [props.isLoggedIn]);
 
+  // Set background image
   useEffect(() => {
     const body = document.querySelector("body");
     body.className = "img5";
   }, []);
 
-  // Either creates a new "Day" entry or adjusts the currently existing entry from same day
+  // Either create a new "Day" entry or adjust the currently existing entry from same day
   const setDayInfo = async (mood, date) => {
     try {
       setIsLoading(true);
@@ -37,10 +38,10 @@ const MoodPage = (props) => {
         mood: mood,
       });
 
-      // Sets info for later getting details to display
+      // Set info for later getting details to display
       setCurrDayInfo({ book, movie, playlist });
 
-      // Sets first currently shown info
+      // Set first currently shown info
       setCurrShown({
         current: "book",
         title: book.get("title"),
@@ -56,7 +57,7 @@ const MoodPage = (props) => {
     }
   };
 
-  // Changes the currently shown information (loops through currShown)
+  // Change the currently shown information (loops through currShown)
   const changeCurrShownHandler = (e) => {
     if (e.target.id === "arrow-forward") {
       switch (currShown.current) {

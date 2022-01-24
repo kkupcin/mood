@@ -30,6 +30,7 @@ const getCalendarTemplate = (currentDate) => {
     date: "",
   };
 
+  // Push day template into an array
   for (let i = 0; i < daysInMon; i++) {
     month.days.push({ ...day });
   }
