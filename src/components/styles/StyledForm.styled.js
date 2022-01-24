@@ -13,19 +13,6 @@ export const StyledForm = styled.form`
     margin: 24px 0;
   }
 
-  input {
-    border: none;
-    background-color: transparent;
-    font-family: inherit;
-    color: inherit;
-    border-bottom: 1px solid #5a4c4c;
-    padding: 14px;
-    padding-left: 0;
-    outline: none;
-    margin-top: 12px;
-    font-size: 18px;
-  }
-
   button {
     border: none;
     background-color: #5a4c4c;
@@ -57,4 +44,19 @@ export const StyledForm = styled.form`
     width: 100%;
     margin: 0 auto;
   }
+`;
+
+export const StyledInput = styled.input`
+  border: none;
+  background-color: transparent;
+  font-family: inherit;
+  color: inherit;
+  padding: 14px;
+  padding-left: 0;
+  outline: none;
+  margin-top: 12px;
+  font-size: 18px;
+  border-bottom: ${({ error }) => {
+    return error ? "1px solid red" : "1px solid #5a4c4c";
+  }};
 `;

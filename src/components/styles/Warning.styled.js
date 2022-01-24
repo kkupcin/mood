@@ -9,20 +9,20 @@ export const Warning = styled.div`
 
   h1 {
     font-size: 48px;
-    margin: 48px 0;
+    margin: 24px 0;
   }
 
   p {
     font-size: 24px;
-    margin: 48px 0;
+    margin: 24px 0;
   }
 `;
 
 export const StyledLink = styled(Link)`
-  text-decoration: none;
+  text-decoration: underline;
   color: inherit;
   font-size: 32px;
-  margin: 48px 0;
+  margin: 24px 0;
   opacity: 1;
   transition: all 0.2s ease-in-out;
 

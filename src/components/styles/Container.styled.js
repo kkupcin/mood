@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const Container = styled.div`
-  width: 60%;
+  width: ${({ width }) => width || "60%"};
   margin-left: ${({ left }) => left};
   margin-right: ${({ right }) => right};
   display: flex;
@@ -16,6 +16,12 @@ export const Container = styled.div`
     font-size: 36px;
     margin-bottom: 48px;
     margin-top: 48px;
+  }
+
+  &.mood-page {
+    h1 {
+      text-align: center;
+    }
   }
 
   @media screen and (max-width: 1200px) {

@@ -90,8 +90,13 @@ const CalendarModal = (props) => {
       <OuterModal />
       {isLoading && <LoadingSpinner className="mood-calendar" />}
       {!isLoading && (
-        <InnerModal>
-          <ModalExit onClick={closeModalHandler}>x</ModalExit>
+        <InnerModal isMood={props.data.mood}>
+          <ModalExit
+            onClick={closeModalHandler}
+            isMoodDefined={props.data.mood}
+          >
+            x
+          </ModalExit>
           {props.data.mood && (
             <h1>{`${props.month} ${props.day} - ${props.mood}`}</h1>
           )}
@@ -114,7 +119,7 @@ const CalendarModal = (props) => {
               </div>
             </ModalBox>
           )}
-          <MoodChanger>
+          <MoodChanger isMoodDefined={props.data.mood}>
             <h3>
               {props.data.mood
                 ? "Felt different?"

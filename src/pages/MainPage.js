@@ -1,3 +1,4 @@
+import Parse from "parse/lib/browser/Parse";
 import { useEffect } from "react";
 import { Container } from "../components/styles/Container.styled";
 import {
@@ -5,6 +6,7 @@ import {
   StyledMainContent,
   StyledPara,
 } from "../components/styles/StyledMainContent.styled";
+import WarningBox from "../components/WarningBox";
 
 const MainPage = (props) => {
   // Set background image
@@ -22,6 +24,9 @@ const MainPage = (props) => {
 
   return (
     <Container align="left" left="10%">
+      {Parse.User.current() && Parse.User.current().get("isDemo") && (
+        <WarningBox />
+      )}
       <h1>How are you feeling today?</h1>
       <StyledMainContent>
         <StyledLink mood="sad" to={`/mood/sad/${date}`}>

@@ -24,6 +24,8 @@ export const StyledNavBar = styled.div`
     .hamburger {
       position: relative;
       align-items: flex-end;
+      user-select: none;
+
       i {
         display: block;
         padding: 16px;

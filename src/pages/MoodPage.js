@@ -11,7 +11,7 @@ const MoodPage = (props) => {
   const [isLoading, setIsLoading] = useState(true);
   const [currDayInfo, setCurrDayInfo] = useState({});
   const [currShown, setCurrShown] = useState({});
-  // Take mood and date from the URL
+  // Takes mood and date from the URL
   const { mood, date } = useParams();
 
   useEffect(() => {

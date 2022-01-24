@@ -18,6 +18,7 @@ Parse.serverURL = PARSE_HOST_URL;
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [demoIsLoggedIn, setDemoIsLoggedIn] = useState(false);
 
   useEffect(() => {
     if (!Parse.User.current()) {
@@ -32,6 +33,7 @@ function App() {
 
         await Parse.User.become(token);
         setIsLoggedIn(true);
+        setDemoIsLoggedIn(true);
       }
       try {
         loginDemoAcc();
@@ -42,6 +44,7 @@ function App() {
     // Check if there is a user already logged in
     if (Parse.User.current()) {
       setIsLoggedIn(true);
+      setDemoIsLoggedIn(false);
     }
   }, []);
 
@@ -60,13 +63,13 @@ function App() {
           <SignupPage loginHandler={loginHandler} />
         </Route>
         <Route path="/calendar">
-          {isLoggedIn ? <CalendarPage /> : <Redirect to="/" />}
+          <CalendarPage />
         </Route>
         <Route path="/mood/:mood/:date">
           <MoodPage isLoggedIn={isLoggedIn} />
         </Route>
         <Route exact path="/">
-          <MainPage />
+          <MainPage demoIsLoggedIn={demoIsLoggedIn} />
         </Route>
       </Switch>
     </div>

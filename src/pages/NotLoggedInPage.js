@@ -3,7 +3,7 @@ import { StyledLink, Warning } from "../components/styles/Warning.styled";
 
 const NotLoggedInPage = () => {
   return (
-    <Container>
+    <Container width="100%">
       <Warning>
         <h1>Please log in</h1>
         <p>You need to log in to record your mood.</p>

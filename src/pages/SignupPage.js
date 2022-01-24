@@ -2,7 +2,10 @@ import { useEffect, useState } from "react";
 import Parse from "parse";
 import { useHistory } from "react-router-dom";
 import { Container } from "../components/styles/Container.styled";
-import { StyledForm } from "../components/styles/StyledForm.styled";
+import {
+  StyledForm,
+  StyledInput,
+} from "../components/styles/StyledForm.styled";
 
 const SignupPage = (props) => {
   const [signupInfo, setSignupInfo] = useState({
@@ -13,6 +16,12 @@ const SignupPage = (props) => {
   });
   const [passwordIsValid, setPasswordIsValid] = useState(false);
   const [isEveryFieldEmpty, setIsEveryFieldEmpty] = useState(true);
+  const [isFieldEmpty, setIsFieldEmpty] = useState({
+    username: false,
+    email: false,
+    password: false,
+    confirmPassword: false,
+  });
 
   let history = useHistory();
 
@@ -38,20 +47,40 @@ const SignupPage = (props) => {
 
   // Handle input and set state for signing up
   const usernameInputHandler = (e) => {
-    setSignupInfo({ ...signupInfo, username: e.target.value });
+    setSignupInfo({ ...signupInfo, username: e.target.value.toLowerCase() });
+    if (e.target.value === "") {
+      setIsFieldEmpty({ ...isFieldEmpty, username: true });
+    } else {
+      setIsFieldEmpty({ ...isFieldEmpty, username: false });
+    }
   };
 
   const emailInputHandler = (e) => {
     setSignupInfo({ ...signupInfo, email: e.target.value });
+    if (e.target.value === "") {
+      setIsFieldEmpty({ ...isFieldEmpty, email: true });
+    } else {
+      setIsFieldEmpty({ ...isFieldEmpty, email: false });
+    }
   };
 
   const passwordInputHandler = (e) => {
     setSignupInfo({ ...signupInfo, password: e.target.value });
+    if (e.target.value === "") {
+      setIsFieldEmpty({ ...isFieldEmpty, password: true });
+    } else {
+      setIsFieldEmpty({ ...isFieldEmpty, password: false });
+    }
   };
 
   // Check if entered passwords match
   const passwordCheckHandler = (e) => {
     setSignupInfo({ ...signupInfo, confirmPassword: e.target.value });
+    if (e.target.value === "") {
+      setIsFieldEmpty({ ...isFieldEmpty, confirmPassword: true });
+    } else {
+      setIsFieldEmpty({ ...isFieldEmpty, confirmPassword: false });
+    }
 
     if (signupInfo.password === e.target.value) {
       setPasswordIsValid(true);
@@ -88,23 +117,40 @@ const SignupPage = (props) => {
         <StyledForm>
           <div>
             <label>Username</label>
-            <input type="text" onChange={usernameInputHandler}></input>
+            <StyledInput
+              type="text"
+              onChange={usernameInputHandler}
+              value={signupInfo.username}
+              error={isFieldEmpty.username}
+            ></StyledInput>
           </div>
           <div>
             <label>Email</label>
-            <input type="email" onChange={emailInputHandler}></input>
+            <StyledInput
+              type="email"
+              onChange={emailInputHandler}
+              value={signupInfo.email}
+              error={isFieldEmpty.email}
+            ></StyledInput>
           </div>
           <div>
             <label>Password</label>
-            <input type="password" onChange={passwordInputHandler}></input>
+            <StyledInput
+              type="password"
+              onChange={passwordInputHandler}
+              value={signupInfo.password}
+              error={isFieldEmpty.password}
+            ></StyledInput>
           </div>
           <div>
             <label>Confirm password</label>
-            <input
+            <StyledInput
               type="password"
               onChange={passwordCheckHandler}
+              value={signupInfo.confirmPassword}
+              error={isFieldEmpty.confirmPassword}
               id="password-check"
-            ></input>
+            ></StyledInput>
           </div>
           <button
             disabled={isEveryFieldEmpty || !passwordIsValid}

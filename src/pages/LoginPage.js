@@ -2,7 +2,10 @@ import { useState, useEffect } from "react";
 import Parse from "parse";
 import { useHistory } from "react-router-dom";
 import { Container } from "../components/styles/Container.styled";
-import { StyledForm } from "../components/styles/StyledForm.styled";
+import {
+  StyledForm,
+  StyledInput,
+} from "../components/styles/StyledForm.styled";
 
 const LoginPage = (props) => {
   const [loginInfo, setLoginInfo] = useState({
@@ -10,6 +13,10 @@ const LoginPage = (props) => {
     password: "",
   });
   const [isEveryFieldEmpty, setIsEveryFieldEmpty] = useState(true);
+  const [isFieldEmpty, setIsFieldEmpty] = useState({
+    username: false,
+    password: false,
+  });
 
   let history = useHistory();
 
@@ -31,17 +38,27 @@ const LoginPage = (props) => {
   // Handle inputs and set log in info state
   const usernameInputHandler = (e) => {
     setLoginInfo({ ...loginInfo, username: e.target.value });
+    if (e.target.value === "") {
+      setIsFieldEmpty({ ...isFieldEmpty, username: true });
+    } else {
+      setIsFieldEmpty({ ...isFieldEmpty, username: false });
+    }
   };
 
   const passwordInputHandler = (e) => {
     setLoginInfo({ ...loginInfo, password: e.target.value });
+    if (e.target.value === "") {
+      setIsFieldEmpty({ ...isFieldEmpty, password: true });
+    } else {
+      setIsFieldEmpty({ ...isFieldEmpty, password: false });
+    }
   };
 
   // Log user in with provided details
   const loginFormSubmitHandler = async (e) => {
     e.preventDefault();
 
-    const usernameValue = loginInfo.username;
+    const usernameValue = loginInfo.username.toLowerCase();
     const passwordValue = loginInfo.password;
 
     try {
@@ -65,19 +82,21 @@ const LoginPage = (props) => {
       <StyledForm>
         <div>
           <label>Username</label>
-          <input
+          <StyledInput
             type="text"
             onChange={usernameInputHandler}
             value={loginInfo.username}
-          ></input>
+            error={isFieldEmpty.username}
+          ></StyledInput>
         </div>
         <div>
           <label>Password</label>
-          <input
+          <StyledInput
             type="password"
             onChange={passwordInputHandler}
             value={loginInfo.password}
-          ></input>
+            error={isFieldEmpty.password}
+          ></StyledInput>
         </div>
         <button disabled={isEveryFieldEmpty} onClick={loginFormSubmitHandler}>
           Log me in

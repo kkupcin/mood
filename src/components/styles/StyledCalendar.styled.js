@@ -13,12 +13,15 @@ export const StyledCalendarContainer = styled.div`
     align-items: center;
   }
 
-  @media screen and (max-width: 450px) {
-    padding: 24px;
-  }
+  .calendar-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
 
-  @media screen and (max-width: 320px) {
-    padding-top: 48px;
+    @media screen and (max-width: 375px) {
+      max-width: 320px;
+    }
   }
 `;
 
@@ -68,7 +71,11 @@ export const StyledCalendar = styled.div`
 export const CalendarList = styled.ul`
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 16px;
+  gap: 6px;
+
+  @media screen and (min-width: 375px) {
+    gap: 12px;
+  }
 
   @media screen and (min-width: 700px) {
     gap: 24px;
@@ -119,7 +126,6 @@ export const CalendarItem = styled.li`
   @media screen and (max-width: 700px) {
     width: 28px;
     height: 28px;
-
     span {
       opacity: 1;
       top: 8px;
@@ -128,8 +134,11 @@ export const CalendarItem = styled.li`
   }
 
   @media screen and (max-width: 450px) {
+    width: 24px;
+    height: 24px;
     span {
       font-size: 14px;
+      top: 6px;
     }
   }
 `;
@@ -138,7 +147,7 @@ export const ColorGuide = styled.ul`
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 16px;
-  padding: 48px 0;
+  padding: 24px 0;
 
   li {
     display: flex;
@@ -149,7 +158,6 @@ export const ColorGuide = styled.ul`
 
   @media screen and (max-width: 700px) {
     grid-template-columns: repeat(3, 1fr);
-    padding: 48px 12px;
 
     li {
       font-size: 16px;
@@ -158,7 +166,28 @@ export const ColorGuide = styled.ul`
 
   @media screen and (max-width: 450px) {
     grid-template-columns: repeat(2, 1fr);
-    padding: 36px 0;
+    gap: 8px;
+  }
+`;
+
+export const ColorGuideSpan = styled.span`
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+  position: relative;
+  background-color: ${({ mood }) =>
+    (mood === "sad" && "#C0C781") ||
+    (mood === "adventurous" && "#841C26") ||
+    (mood === "excited" && "#E9806E") ||
+    (mood === "afraid" && "#477890") ||
+    (mood === "nostalgic" && "#5B6C5D") ||
+    (mood === "happy" && "#9067C6") ||
+    (mood === "lonely" && "#C59B76") ||
+    (mood === "" && "#CCC")};
+
+  @media screen and (max-width: 700px) {
+    width: 28px;
+    height: 28px;
   }
 `;
 
@@ -187,9 +216,5 @@ export const Arrow = styled.button`
     margin: ${({ position }) =>
       (position === "left" && "0 25px 0 0") ||
       (position === "right" && "0 0 0 25px")};
-  }
-
-  @media screen and (max-width: 450px) {
-    margin: 0 12px;
   }
 `;

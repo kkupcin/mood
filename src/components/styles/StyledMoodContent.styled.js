@@ -1,12 +1,14 @@
 import styled from "styled-components";
 
 export const StyledMoodContent = styled.div`
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 6fr 1fr;
   font-size: 18px;
   line-height: 1.5;
   align-items: center;
   justify-content: space-between;
   padding: 48px;
+  min-height: 400px;
 
   .outer-mood-page-carousel {
     display: flex;
@@ -14,12 +16,15 @@ export const StyledMoodContent = styled.div`
 
     img {
       width: 200px;
+      flex-grow: 1;
+      border-radius: 6px;
     }
 
     div {
       display: flex;
       flex-direction: column;
       padding-left: 48px;
+      flex-grow: 4;
 
       h3 {
         font-size: 28px;
@@ -37,7 +42,7 @@ export const StyledMoodContent = styled.div`
     }
   }
 
-  @media screen and (max-width: 700px) {
+  @media screen and (max-width: 900px) {
     font-size: 16px;
     padding: 0;
 
@@ -51,6 +56,7 @@ export const StyledMoodContent = styled.div`
 
       div {
         padding: 0;
+        padding-bottom: 48px;
         h3 {
           font-size: 24px;
         }

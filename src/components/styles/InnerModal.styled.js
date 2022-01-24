@@ -12,6 +12,7 @@ export const InnerModal = styled.div`
   gap: 16px;
   flex-direction: column;
   align-items: center;
+  justify-content: ${({ isMood }) => (!isMood && "center") || ""};
   padding: 64px 24px;
   overflow: auto;
   -ms-overflow-style: none;
@@ -27,18 +28,20 @@ export const InnerModal = styled.div`
 
   @media screen and (min-width: 500px) {
     border-radius: 8px;
-    bottom: 10%;
-    top: 10%;
-    left: 10%;
-    right: 10%;
+    top: ${({ isMood }) => (!isMood && "50%") || "10%"};
+    left: ${({ isMood }) => (!isMood && "50%") || "10%"};
+    right: ${({ isMood }) => (!isMood && "auto") || "10%"};
+    bottom: ${({ isMood }) => (!isMood && "auto") || "10%"};
+    transform: ${({ isMood }) => (!isMood && "translate(-50%, -50%)") || ""};
     width: auto;
   }
 
   @media screen and (min-width: 700px) {
-    top: 15%;
-    left: 15%;
-    right: 15%;
-    bottom: 15%;
+    top: ${({ isMood }) => (!isMood && "50%") || "15%"};
+    left: ${({ isMood }) => (!isMood && "50%") || "15%"};
+    right: ${({ isMood }) => (!isMood && "auto") || "15%"};
+    bottom: ${({ isMood }) => (!isMood && "auto") || "15%"};
+    transform: ${({ isMood }) => (!isMood && "translate(-50%, -50%)") || ""};
   }
 
   @media screen and (min-width: 1000px) {
@@ -121,11 +124,11 @@ export const ModalExit = styled.div`
 
   @media screen and (min-width: 700px) {
     top: 10%;
-    right: 15%;
+    right: ${({ isMoodDefined }) => (!isMoodDefined && "5%") || "15%"};
   }
 
   @media screen and (min-width: 1000px) {
-    top: -10%;
+    top: ${({ isMoodDefined }) => (isMoodDefined && "-50px") || "-20%"};
     right: 0;
   }
 `;
