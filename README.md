@@ -8,7 +8,7 @@
 
 ## Overview
 
-[View Live Demo] (https://mood-tracker.kkupcin.com/)
+[View Live Demo](https://mood-tracker.kkupcin.com/)
 
 This is a mood tracking app, meant for tracking your mood and getting movie, book and playlist suggestions based on the mood chosen for the day.
 
